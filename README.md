@@ -1,32 +1,10 @@
-This is a [Tina CMS](https://tina.io/) starter project.
+# PUDA Website
 
-# Astro + TinaCMS Starter Kit: Blog
+### Tech Stack
 
-```sh
-npx create-tina-app@latest --template tina-astro-starter
-```
+- Astro + Tina CMS [template](https://github.com/tinacms/tina-astro-starter/tree/4ca1265e4decf181ebee6e79b231bcd27d02814a)
 
-And start editing with TinaCMS at `/admin`! 
-
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
-
-Features:
-
-- ✅ Markdown & MDX support + TinaCMS Markdown Component
-- ✅ TinaCMS Collections (Pages, Blogs, Config)
-- ✅ Visual Editing using Custom Loaders and Client Directives (requires React)
-- ✅ 100/100 Lighthouse performance
-- ✅ View transitions are enabled 
-- ✅ Minimal styling (make it your own!)
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-
-
-## 🚀 Project Structure
+## Project Structure
 
 Inside of your project, you'll see the following folders and files:
 
@@ -83,11 +61,3 @@ All commands are run from the root of the project, from a terminal:
 | `npm run preview`         | Preview your build locally, before deploying     |
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Check out the [TinaCMS documentation](https://tina.io/docs) and the [Astro documentation](https://docs.astro.build) or jump into our [TinaCMS Discord server](https://discord.gg/cG2UNREu).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
