@@ -50,6 +50,15 @@
 	--cli-text: #d8ffd0;
 	--cli-prompt: #e8ff9c;
 	--cli-output: #a3e0a0;
+
+	/* Blog */
+	--blog-bg: #0d110d;
+	--blog-bg-gradient: linear-gradient(180deg, #131813 0%, #0d110d 600px);
+	--blog-code-bg: rgba(255, 255, 255, 0.08);
+	--blog-border: rgba(255, 255, 255, 0.10);
+	--blog-heading-fg: #f0f5ee;
+	--blog-link: #e8ff9c;
+	--blog-link-hover: #ffffff;
 }
 
 /* ── Light theme ─────────────────────────────────────────────── */
@@ -92,6 +101,15 @@
 	--cli-text: #2d5a28;
 	--cli-prompt: #437200;
 	--cli-output: #1a4d18;
+
+	/* Blog */
+	--blog-bg: #f5f7f2;
+	--blog-bg-gradient: linear-gradient(180deg, #ebede7 0%, #f5f7f2 600px);
+	--blog-code-bg: rgba(0, 0, 0, 0.06);
+	--blog-border: rgba(0, 0, 0, 0.10);
+	--blog-heading-fg: #0d110d;
+	--blog-link: #437200;
+	--blog-link-hover: #0d110d;
 }
 
 @font-face {
