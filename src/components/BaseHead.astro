@@ -18,7 +18,7 @@ const { title, description, image = '/blog-placeholder-1.jpg' } = Astro.props;
 <!-- Theme initialisation — runs before first paint to avoid flash -->
 <script is:inline>
   (function () {
-    var stored = localStorage.getItem('puda-theme');
+    var stored = localStorage.getItem('theme');
     var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     var theme = stored || (prefersDark ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', theme);

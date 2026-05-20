@@ -44,7 +44,14 @@ import IconLink from "./react/IconLink";
 <script>
 	function applyTheme(theme: string) {
 		document.documentElement.setAttribute('data-theme', theme);
-		localStorage.setItem('puda-theme', theme);
+		localStorage.setItem('theme', theme);
+	}
+
+	function restoreTheme() {
+		const stored = localStorage.getItem('theme');
+		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		const theme = stored ?? (prefersDark ? 'dark' : 'light');
+		document.documentElement.setAttribute('data-theme', theme);
 	}
 
 	function initToggle() {
@@ -57,7 +64,13 @@ import IconLink from "./react/IconLink";
 	}
 
 	initToggle();
-	document.addEventListener('astro:after-swap', initToggle);
+
+	// After each client-side navigation the <html> element is swapped in fresh
+	// (without data-theme), so we must re-apply the stored preference.
+	document.addEventListener('astro:after-swap', () => {
+		restoreTheme();
+		initToggle();
+	});
 </script>
 
 <style>

@@ -1,6 +1,7 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import MosaicHero from '../components/home/MosaicHero.astro';
 import CliAnimation from '../components/home/CliAnimation.astro';
 import VideoPlaceholder from '../components/VideoPlaceholder.astro';
@@ -16,7 +17,7 @@ const DEMO_VIDEO_EMBED =
       description="PUDA connects AI agents to instruments, robots, datastreams, approvals, and audit trails."
     />
   </head>
-  <body class="min-h-screen">
+  <body class="min-h-screen flex flex-col">
 
     <Header />
 
@@ -58,6 +59,8 @@ const DEMO_VIDEO_EMBED =
       </div>
     </section>
 
+    <Footer />
+
   </body>
 </html>
 
@@ -66,6 +69,9 @@ const DEMO_VIDEO_EMBED =
     background-color: var(--bg-primary);
     color: var(--fg-primary);
     transition: background-color 0.25s ease, color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
 
   .hero-section {
@@ -102,6 +108,7 @@ const DEMO_VIDEO_EMBED =
   }
 
   .video-section {
+    flex: 1;
     background-color: var(--bg-secondary);
     transition: background-color 0.25s ease;
   }

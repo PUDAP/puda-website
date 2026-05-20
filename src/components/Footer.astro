@@ -21,9 +21,11 @@ const today = new Date();
 
 	.copyright-footer {
 		padding: 2em 1em 2em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		color: rgb(var(--gray));
+		background-color: var(--footer-bg);
+		border-top: 1px solid var(--footer-border);
+		color: var(--footer-fg);
 		text-align: center;
+		transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 	}
 
 	.social-links {
@@ -35,11 +37,12 @@ const today = new Date();
 
 	.social-links a {
 		text-decoration: none;
-		color: rgb(var(--gray));
+		color: var(--footer-link-fg);
+		transition: color 0.2s ease;
 	}
 
 	.social-links a:hover {
-		color: rgb(var(--gray-dark));
+		color: var(--footer-link-hover);
 	}
 
 	.tina-footer {
