@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
+/* ── Dark theme (default) ────────────────────────────────────── */
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
+	--accent: #e8c200;
+	--accent-dark: #a88800;
 	--black: 15, 18, 25;
 	--gray: 96, 115, 159;
 	--gray-light: 229, 233, 240;
@@ -10,6 +11,87 @@
 	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
 	--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
 		0 16px 32px rgba(var(--gray), 33%);
+
+	/* Page backgrounds */
+	--bg-primary: #080908;
+	--bg-secondary: #111111;
+
+	/* Text */
+	--fg-primary: #ffffff;
+	--fg-secondary: rgba(255, 255, 255, 0.70);
+
+	/* Accent */
+	--accent-lime: #e8ff9c;
+	--accent-lime-fg: #080908;
+	--accent-label: #e8ff9c;
+
+	/* Secondary CTA button */
+	--cta-border: rgba(255, 255, 255, 0.15);
+	--cta-fg: rgba(255, 255, 255, 0.80);
+	--cta-hover-bg: rgba(255, 255, 255, 0.10);
+
+	/* Header */
+	--header-bg: rgba(255, 255, 255, 0.06);
+	--header-border: rgba(255, 255, 255, 0.08);
+	--header-fg: rgba(255, 255, 255, 0.90);
+	--header-nav-fg: rgba(255, 255, 255, 0.70);
+	--header-nav-hover: rgba(255, 255, 255, 0.95);
+	--toggle-bg: rgba(255, 255, 255, 0.08);
+	--toggle-hover-bg: rgba(255, 255, 255, 0.15);
+	--toggle-fg: rgba(255, 255, 255, 0.75);
+
+	/* CLI terminal */
+	--cli-wrapper-bg: rgba(0, 0, 0, 0.48);
+	--cli-wrapper-border: rgba(255, 255, 255, 0.12);
+	--cli-terminal-bg: #080d0b;
+	--cli-terminal-border: rgba(255, 255, 255, 0.10);
+	--cli-titlebar-border: rgba(255, 255, 255, 0.10);
+	--cli-title-fg: rgba(255, 255, 255, 0.40);
+	--cli-text: #d8ffd0;
+	--cli-prompt: #e8ff9c;
+	--cli-output: #a3e0a0;
+}
+
+/* ── Light theme ─────────────────────────────────────────────── */
+[data-theme="light"] {
+	/* Page backgrounds */
+	--bg-primary: #f5f7f2;
+	--bg-secondary: #ebede7;
+
+	/* Text */
+	--fg-primary: #0d110d;
+	--fg-secondary: rgba(13, 17, 13, 0.65);
+
+	/* Accent */
+	--accent-lime: #e8ff9c;
+	--accent-lime-fg: #080908;
+	--accent-label: #437200;
+
+	/* Secondary CTA button */
+	--cta-border: rgba(13, 17, 13, 0.18);
+	--cta-fg: rgba(13, 17, 13, 0.75);
+	--cta-hover-bg: rgba(13, 17, 13, 0.07);
+
+	/* Header */
+	--header-bg: rgba(245, 247, 242, 0.88);
+	--header-border: rgba(0, 0, 0, 0.08);
+	--header-fg: rgba(13, 17, 13, 0.90);
+	--header-nav-fg: rgba(13, 17, 13, 0.65);
+	--header-nav-hover: rgba(13, 17, 13, 0.95);
+	--toggle-bg: rgba(0, 0, 0, 0.06);
+	--toggle-hover-bg: rgba(0, 0, 0, 0.10);
+	--toggle-fg: rgba(13, 17, 13, 0.70);
+
+	/* CLI terminal */
+	--cli-wrapper-bg: rgba(255, 255, 255, 0.65);
+	--cli-wrapper-border: rgba(0, 0, 0, 0.10);
+	--cli-terminal-bg: #f0f5ee;
+	--cli-terminal-border: rgba(0, 0, 0, 0.08);
+	--cli-titlebar-border: rgba(0, 0, 0, 0.08);
+	--cli-title-fg: rgba(13, 17, 13, 0.40);
+	--cli-text: #2d5a28;
+	--cli-prompt: #437200;
+	--cli-output: #1a4d18;
 }
 
 @font-face {

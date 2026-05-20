@@ -1,16 +1,16 @@
-<div class="hero-cli relative mt-8 w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/12 bg-black/48 p-4 text-left shadow-2xl shadow-black/50 backdrop-blur md:mt-10 md:p-6">
+<div class="hero-cli relative mt-8 w-full max-w-5xl overflow-hidden rounded-[2rem] border p-4 text-left shadow-2xl backdrop-blur md:mt-10 md:p-6">
   <div class="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(232,255,156,0.20),transparent_30%),radial-gradient(circle_at_86%_70%,rgba(87,190,255,0.14),transparent_28%)]"></div>
-  <div class="relative rounded-[1.4rem] border border-white/10 bg-[#080d0b] shadow-xl">
-    <div class="flex items-center gap-2 border-b border-white/10 px-4 py-3">
+  <div class="cli-terminal relative rounded-[1.4rem] border shadow-xl">
+    <div class="cli-titlebar flex items-center gap-2 border-b px-4 py-3">
       <span class="size-2.5 rounded-full bg-[#ff6b5f]"></span>
       <span class="size-2.5 rounded-full bg-[#ffd36b]"></span>
       <span class="size-2.5 rounded-full bg-[#65e28f]"></span>
-      <span class="ml-3 font-mono text-xs text-white/40">puda — zsh</span>
+      <span class="cli-title ml-3 font-mono text-xs">puda — zsh</span>
     </div>
-    <div id="cli-output" class="h-[19rem] space-y-2.5 overflow-hidden p-4 font-mono text-xs leading-4 text-[#d8ffd0] sm:text-sm md:h-[22rem] md:p-6 md:text-[15px] md:leading-5 [&_p]:truncate">
-      <p id="cli-cursor" class="inline-flex items-center gap-2 text-[#e8ff9c]">
+    <div id="cli-output" class="h-[19rem] space-y-2.5 overflow-hidden p-4 font-mono text-xs leading-4 sm:text-sm md:h-[22rem] md:p-6 md:text-[15px] md:leading-5 [&_p]:truncate">
+      <p id="cli-cursor" class="inline-flex items-center gap-2">
         <span id="cli-prompt">$</span>
-        <span class="h-[1.1em] w-[0.5em] animate-pulse bg-[#e8ff9c]"></span>
+        <span class="cli-cursor-block h-[1.1em] w-[0.5em] animate-pulse"></span>
       </p>
     </div>
   </div>
@@ -18,19 +18,19 @@
 
 <script>
   const LINES = [
-    { text: "$ puda protocol validate -f protocols/cv_scan.json", color: null },
-    { text: "✓ validation passed: first + biologic commands resolved", color: "#a3e0a0" },
-    { text: "$ puda protocol run -f protocols/cv_scan.json", color: null },
-    { text: "run_id: f80fcfef-5cce-4e28-b66e-b345afa13a6c", color: "#a3e0a0" },
-    { text: "first.start → idle | biologic.cv → data streamed", color: "#a3e0a0" },
-    { text: '$ puda db exec "SELECT run_id, command_name, machine_id FROM command_log LIMIT 3"', color: null },
-    { text: "✓ report artifact + audit trail ready", color: "#a3e0a0" },
+    { text: "$ puda protocol validate -f protocols/cv_scan.json", isCommand: true },
+    { text: "✓ validation passed: first + biologic commands resolved", isCommand: false },
+    { text: "$ puda protocol run -f protocols/cv_scan.json", isCommand: true },
+    { text: "run_id: f80fcfef-5cce-4e28-b66e-b345afa13a6c", isCommand: false },
+    { text: "first.start → idle | biologic.cv → data streamed", isCommand: false },
+    { text: '$ puda db exec "SELECT run_id, command_name, machine_id FROM command_log LIMIT 3"', isCommand: true },
+    { text: "✓ report artifact + audit trail ready", isCommand: false },
   ];
 
-  const CHAR_DELAY   = 12;   // ms per character
-  const LINE_PAUSE   = 180;  // ms pause between lines
-  const CLEAR_DELAY  = 3000; // ms after last line before clearing
-  const RESTART_DELAY = 1000; // ms after clear before retyping
+  const CHAR_DELAY   = 12;
+  const LINE_PAUSE   = 180;
+  const CLEAR_DELAY  = 3000;
+  const RESTART_DELAY = 1000;
 
   function sleep(ms: number) {
     return new Promise<void>(resolve => setTimeout(resolve, ms));
@@ -48,9 +48,9 @@
     const cursor  = document.getElementById("cli-cursor")!;
 
     while (true) {
-      for (const { text, color } of LINES) {
+      for (const { text, isCommand } of LINES) {
         const p = document.createElement("p");
-        if (color) p.style.color = color;
+        p.className = isCommand ? "cli-line-command" : "cli-line-output";
         output.insertBefore(p, cursor);
         await typeLine(p, text);
         await sleep(LINE_PAUSE);
@@ -58,7 +58,6 @@
 
       await sleep(CLEAR_DELAY);
 
-      // Remove all lines except the cursor row
       const lines = output.querySelectorAll("p:not(#cli-cursor)");
       lines.forEach(l => l.remove());
 
@@ -68,3 +67,47 @@
 
   runLoop();
 </script>
+
+<style>
+  .hero-cli {
+    background-color: var(--cli-wrapper-bg);
+    border-color: var(--cli-wrapper-border);
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .cli-terminal {
+    background-color: var(--cli-terminal-bg);
+    border-color: var(--cli-terminal-border);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .cli-titlebar {
+    border-color: var(--cli-titlebar-border);
+  }
+
+  .cli-title {
+    color: var(--cli-title-fg);
+  }
+
+  #cli-output {
+    color: var(--cli-text);
+  }
+
+  #cli-cursor,
+  :global(.cli-line-command) {
+    color: var(--cli-text);
+  }
+
+  :global(.cli-line-output) {
+    color: var(--cli-output);
+  }
+
+  #cli-prompt {
+    color: var(--cli-prompt);
+  }
+
+  .cli-cursor-block {
+    background-color: var(--cli-prompt);
+  }
+</style>

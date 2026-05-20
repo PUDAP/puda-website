@@ -9,15 +9,41 @@ const tiles = [
 ];
 ---
 
-<div class="absolute inset-0 overflow-hidden">
-  <div class="grid h-full grid-cols-6 grid-rows-4 gap-px opacity-95">
+<div class="mosaic-hero absolute inset-0 overflow-hidden">
+  <div class="mosaic-grid grid h-full grid-cols-6 grid-rows-4 gap-px opacity-95">
     {tiles.map(({ gradient, col }) => (
       <div class={`relative bg-gradient-to-br ${gradient} ${col}`}>
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.35),transparent_2px),radial-gradient(circle_at_65%_55%,rgba(255,255,255,0.18),transparent_1px)] bg-[size:34px_34px] mix-blend-screen opacity-25" />
-        <div class="absolute inset-0 bg-black/35" />
+        <div class="tile-overlay absolute inset-0" />
       </div>
     ))}
   </div>
-  <div class="absolute inset-0 bg-[linear-gradient(rgba(232,255,156,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(232,255,156,0.12)_1px,transparent_1px)] bg-[size:120px_120px] opacity-30" />
-  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.20)_42%,rgba(0,0,0,0.82)_100%)]" />
+  <div class="mosaic-grid-lines absolute inset-0 bg-[linear-gradient(rgba(232,255,156,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(232,255,156,0.12)_1px,transparent_1px)] bg-[size:120px_120px] opacity-30" />
+  <div class="mosaic-vignette absolute inset-0" />
 </div>
+
+<style>
+  /* Dark mode overlays */
+  .tile-overlay {
+    background-color: rgba(0, 0, 0, 0.35);
+    transition: background-color 0.3s ease;
+  }
+  .mosaic-vignette {
+    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.20) 42%, rgba(0,0,0,0.82) 100%);
+    transition: background 0.3s ease;
+  }
+
+  /* Light mode overrides */
+  :global([data-theme="light"]) .mosaic-grid {
+    opacity: 0.55;
+  }
+  :global([data-theme="light"]) .tile-overlay {
+    background-color: rgba(245, 247, 242, 0.25);
+  }
+  :global([data-theme="light"]) .mosaic-grid-lines {
+    opacity: 0.12;
+  }
+  :global([data-theme="light"]) .mosaic-vignette {
+    background: radial-gradient(circle at center, transparent 0%, rgba(245,247,242,0.45) 42%, rgba(245,247,242,0.92) 100%);
+  }
+</style>
