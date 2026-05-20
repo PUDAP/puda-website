@@ -1,0 +1,355 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title="PUDA About"
+      description="Learn about PUDA, the runtime environment for Physical AI."
+    />
+  </head>
+
+  <body class="about-body">
+    <Header />
+
+    <main class="about-main">
+      <!-- Background layers (matching demo/home aesthetic) -->
+      <div class="about-grid-bg" />
+      <div class="about-radial-bg" />
+      <div class="about-vignette" />
+
+      <div class="about-content">
+
+        <!-- Label -->
+        <p class="about-label">About</p>
+
+        <!-- Heading -->
+        <h1 class="about-heading">
+          The runtime environment<br />for Physical AI
+        </h1>
+
+        <!-- Description -->
+        <p class="about-description">
+          PUDA (Physical Unified Device Architecture) is an open platform that
+          connects AI agents to instruments, robots, datastreams, approvals, and
+          audit trails. Built for research labs and automation teams who need
+          reliable, inspectable control over physical hardware.
+        </p>
+
+        <hr class="about-divider" />
+
+        <!-- Mission section -->
+        <section class="about-section">
+          <h2 class="about-section-heading">Mission</h2>
+          <p class="about-section-body">
+            Physical AI is only as trustworthy as the layer beneath it. PUDA
+            provides a typed, auditable middleware that makes every action
+            traceable — from the LLM request to the actual instrument command —
+            so researchers can iterate fast without sacrificing reproducibility
+            or safety.
+          </p>
+        </section>
+
+        <!-- Cards row -->
+        <div class="about-cards">
+          <div class="about-card">
+            <span class="about-card-label">Open source</span>
+            <p class="about-card-body">
+              Core runtime and edge adapters are MIT-licensed and developed in
+              the open on GitHub.
+            </p>
+            <a
+              href="https://github.com/PUDAP"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="about-card-link"
+            >
+              github.com/PUDAP →
+            </a>
+          </div>
+
+          <div class="about-card">
+            <span class="about-card-label">Inspectable</span>
+            <p class="about-card-body">
+              Every agent turn, tool call, and hardware action is recorded and
+              replayable — no black boxes.
+            </p>
+          </div>
+        </div>
+
+        <hr class="about-divider" />
+
+        <!-- Contact section -->
+        <section class="about-section">
+          <h2 class="about-section-heading">Contact</h2>
+          <p class="about-section-body">
+            Questions, collaborations, or bug reports — reach out directly.
+          </p>
+
+          <div class="about-contact-grid">
+            <a
+              href="mailto:hello@puda.co"
+              class="about-contact-card"
+            >
+              <span class="about-contact-icon">
+                <!-- envelope -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                </svg>
+              </span>
+              <div>
+                <p class="about-contact-type">Email</p>
+                <p class="about-contact-value">hello@puda.co</p>
+              </div>
+            </a>
+
+            <a
+              href="https://github.com/PUDAP"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="about-contact-card"
+            >
+              <span class="about-contact-icon">
+                <!-- github mark -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"/>
+                  <path d="M9 18c-4.51 2-5-2-7-2"/>
+                </svg>
+              </span>
+              <div>
+                <p class="about-contact-type">GitHub</p>
+                <p class="about-contact-value">github.com/PUDAP</p>
+              </div>
+            </a>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .about-body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-primary);
+    color: var(--fg-primary);
+  }
+
+  .about-main {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    padding: 5rem 1.5rem 6rem;
+  }
+
+  /* Background layers */
+  .about-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232, 255, 156, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232, 255, 156, 0.05) 1px, transparent 1px);
+    background-size: 120px 120px;
+    opacity: 0.45;
+    pointer-events: none;
+  }
+  .about-radial-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(232,255,156,0.13), transparent 35%),
+      radial-gradient(circle at 88% 20%, rgba(87,190,255,0.10), transparent 32%);
+    pointer-events: none;
+  }
+  .about-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.22) 50%, rgba(0,0,0,0.72) 100%);
+    pointer-events: none;
+  }
+
+  /* Content wrapper */
+  .about-content {
+    position: relative;
+    z-index: 10;
+    max-width: 52rem;
+    margin: 0 auto;
+  }
+
+  /* Label */
+  .about-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.42em;
+    color: var(--accent-label);
+    margin-bottom: 1.25rem;
+  }
+
+  /* Heading */
+  .about-heading {
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 400;
+    line-height: 1.0;
+    letter-spacing: -0.065em;
+    color: var(--fg-primary);
+    margin: 0 0 1.75rem;
+  }
+
+  /* Description */
+  .about-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--fg-secondary);
+    max-width: 46rem;
+    margin: 0;
+  }
+
+  /* Divider */
+  .about-divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+    margin: 3rem 0;
+  }
+  [data-theme="light"] .about-divider {
+    border-top-color: rgba(0, 0, 0, 0.09);
+  }
+
+  /* Sections */
+  .about-section {
+    margin-bottom: 0;
+  }
+  .about-section-heading {
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--fg-primary);
+    margin: 0 0 0.75rem;
+  }
+  .about-section-body {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--fg-secondary);
+    margin: 0;
+    max-width: 44rem;
+  }
+
+  /* Cards */
+  .about-cards {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    margin-top: 2rem;
+  }
+  .about-card {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    padding: 1.4rem 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: border-color 0.2s;
+  }
+  .about-card:hover {
+    border-color: rgba(232, 255, 156, 0.2);
+  }
+  [data-theme="light"] .about-card {
+    border-color: rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.02);
+  }
+  [data-theme="light"] .about-card:hover {
+    border-color: rgba(67, 114, 0, 0.25);
+  }
+  .about-card-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--accent-label);
+  }
+  .about-card-body {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--fg-secondary);
+    margin: 0;
+    flex: 1;
+  }
+  .about-card-link {
+    font-size: 0.82rem;
+    font-family: monospace;
+    color: var(--accent-label);
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+  .about-card-link:hover {
+    opacity: 0.75;
+  }
+
+  /* Contact grid */
+  .about-contact-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    margin-top: 1.5rem;
+  }
+  .about-contact-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    padding: 1.25rem 1.4rem;
+    background: rgba(255, 255, 255, 0.03);
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .about-contact-card:hover {
+    border-color: rgba(232, 255, 156, 0.25);
+    background: rgba(232, 255, 156, 0.04);
+  }
+  [data-theme="light"] .about-contact-card {
+    border-color: rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.02);
+  }
+  [data-theme="light"] .about-contact-card:hover {
+    border-color: rgba(67, 114, 0, 0.25);
+    background: rgba(67, 114, 0, 0.04);
+  }
+  .about-contact-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 0.5rem;
+    background: rgba(232, 255, 156, 0.10);
+    color: var(--accent-label);
+  }
+  [data-theme="light"] .about-contact-icon {
+    background: rgba(67, 114, 0, 0.08);
+  }
+  .about-contact-type {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: var(--accent-label);
+    margin: 0 0 0.25rem;
+  }
+  .about-contact-value {
+    font-size: 0.9rem;
+    font-family: monospace;
+    color: var(--fg-primary);
+    margin: 0;
+    word-break: break-all;
+  }
+</style>

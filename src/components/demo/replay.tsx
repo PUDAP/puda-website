@@ -254,7 +254,7 @@ function ActionTurn({ turn, cards }: { turn: number; cards: EvidenceActionCard[]
 export function Replay() {
   const [turn, setTurnState] = useState(2);
   const [playing, setPlaying] = useState(false);
-  const [speed, setSpeed] = useState(SPEED_PRESETS[1].ms);
+  const [speed, setSpeed] = useState<(typeof SPEED_PRESETS)[number]["ms"]>(SPEED_PRESETS[1].ms);
 
   const visibleMessages = useMemo(() => visibleWindow(evidenceMessages, turn), [turn]);
   const visibleActions = useMemo(() => visibleWindow(evidenceActions, turn), [turn]);
