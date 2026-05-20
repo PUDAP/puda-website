@@ -1,0 +1,23 @@
+---
+const tiles = [
+  { gradient: "from-[#0b1411] via-[#244536] to-[#d4a04b]", col: "col-span-2 row-span-2" },
+  { gradient: "from-[#050505] via-[#10212a] to-[#57beff]", col: "col-span-2 row-span-1" },
+  { gradient: "from-[#1b1008] via-[#5a311d] to-[#ffdf7d]", col: "col-span-2 row-span-2" },
+  { gradient: "from-[#07100d] via-[#285244] to-[#e8ff9c]", col: "col-span-3 row-span-2" },
+  { gradient: "from-[#0b0d12] via-[#221f36] to-[#a08cff]", col: "col-span-1 row-span-2" },
+  { gradient: "from-[#120909] via-[#4a211f] to-[#e56d4e]", col: "col-span-2 row-span-2" },
+];
+---
+
+<div class="absolute inset-0 overflow-hidden">
+  <div class="grid h-full grid-cols-6 grid-rows-4 gap-px opacity-95">
+    {tiles.map(({ gradient, col }) => (
+      <div class={`relative bg-gradient-to-br ${gradient} ${col}`}>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.35),transparent_2px),radial-gradient(circle_at_65%_55%,rgba(255,255,255,0.18),transparent_1px)] bg-[size:34px_34px] mix-blend-screen opacity-25" />
+        <div class="absolute inset-0 bg-black/35" />
+      </div>
+    ))}
+  </div>
+  <div class="absolute inset-0 bg-[linear-gradient(rgba(232,255,156,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(232,255,156,0.12)_1px,transparent_1px)] bg-[size:120px_120px] opacity-30" />
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.20)_42%,rgba(0,0,0,0.82)_100%)]" />
+</div>

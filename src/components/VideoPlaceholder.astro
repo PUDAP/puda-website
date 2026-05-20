@@ -1,0 +1,18 @@
+---
+interface Props {
+  embedSrc: string;
+  title: string;
+}
+
+const { embedSrc, title } = Astro.props;
+---
+
+<div class="relative w-full overflow-hidden rounded-[2rem] bg-black" style="aspect-ratio: 16/9;">
+  <iframe
+    src={embedSrc}
+    title={title}
+    class="absolute inset-0 h-full w-full border-0"
+    allow="autoplay"
+    allowfullscreen
+  ></iframe>
+</div>
