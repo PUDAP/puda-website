@@ -178,6 +178,13 @@ import Footer from "../components/Footer.astro";
     pointer-events: none;
   }
 
+  /* Light mode: remove all decorative background layers */
+  [data-theme="light"] .about-grid-bg,
+  [data-theme="light"] .about-radial-bg,
+  [data-theme="light"] .about-vignette {
+    display: none;
+  }
+
   /* Content wrapper */
   .about-content {
     position: relative;
