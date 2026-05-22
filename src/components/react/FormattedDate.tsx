@@ -5,13 +5,7 @@ function FormattedDate({ date }: { date: string }) {
 	const _date = new Date(date)
 	return (
 		<time dateTime={_date.toISOString()}>
-			{
-				_date.toLocaleDateString('en-us', {
-					year: 'numeric',
-					month: 'short',
-					day: 'numeric',
-				})
-			}
+			{`${_date.getDate()} ${_date.toLocaleDateString('en-us', { month: 'short' })}, ${_date.getFullYear()}`}
 		</time>
 	)
 }
