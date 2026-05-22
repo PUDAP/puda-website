@@ -8,7 +8,7 @@ type Props = {
 
 export default function VideoEmbed({ url, caption }: Props) {
   return (
-    <figure style={{ margin: '2rem 0' }}>
+    <figure style={{ margin: '0.25em 0' }}>
       <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '8px' }}>
         <iframe
           src={url}
@@ -18,7 +18,7 @@ export default function VideoEmbed({ url, caption }: Props) {
         />
       </div>
       {caption && (
-        <figcaption style={{ textAlign: 'center', marginTop: '0.5rem', fontSize: '0.9em', color: 'var(--gray)' }}>
+        <figcaption style={{ marginTop: '0.4rem', fontSize: '0.875em', fontStyle: 'italic', color: 'var(--fg-secondary)', paddingLeft: '0.5rem' }}>
           {caption}
         </figcaption>
       )}
