@@ -3,6 +3,7 @@ import { tinaField, useTina } from "tinacms/dist/react";
 import type { BlogQuery, BlogQueryVariables } from '../__generated__/types';
 import { TinaMarkdown } from 'tinacms/dist/rich-text'
 import FormattedDate from '../../src/components/react/FormattedDate.tsx';
+import VideoEmbed from '../../src/components/react/VideoEmbed.tsx';
 
 
 type Props = {
@@ -42,7 +43,7 @@ export default function AdminBlogPost(props: Props) {
 					<hr />
 				</div>
 				<div data-tina-field={tinaField(blog, "body")}>
-					<TinaMarkdown content={blog.body} />
+					<TinaMarkdown content={blog.body} components={{ VideoEmbed }} />
 				</div>
 			</div>
 		</article>

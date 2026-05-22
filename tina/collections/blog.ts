@@ -44,6 +44,25 @@ export const BlogCollection: Collection = {
       name: "body",
       label: "Body",
       isBody: true,
+      templates: [
+        {
+          name: "VideoEmbed",
+          label: "Video Embed",
+          fields: [
+            {
+              name: "url",
+              label: "Video URL",
+              type: "string",
+              required: true,
+            },
+            {
+              name: "caption",
+              label: "Caption",
+              type: "string",
+            },
+          ],
+        },
+      ],
     },
   ],
 }
