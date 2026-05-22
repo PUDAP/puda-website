@@ -4,6 +4,7 @@ import type { BlogQuery, BlogQueryVariables } from '../__generated__/types';
 import { TinaMarkdown } from 'tinacms/dist/rich-text'
 import FormattedDate from '../../src/components/react/FormattedDate.tsx';
 import VideoEmbed from '../../src/components/react/VideoEmbed.tsx';
+import Image from '../../src/components/react/Image.tsx';
 
 
 type Props = {
@@ -56,11 +57,11 @@ export default function AdminBlogPost(props: Props) {
 							<span data-tina-field={tinaField(blog, "pubDate")} style={{ color: "var(--fg-primary)" }}>
 								{blog.pubDate && <FormattedDate date={blog.pubDate} />}
 							</span>
-							{blog.updatedDate && (
+							{blog.email && (
 								<>
-									<span style={{ color: "var(--fg-secondary)" }}>Updated</span>
-									<span data-tina-field={tinaField(blog, "updatedDate")} style={{ color: "var(--fg-primary)" }}>
-										<FormattedDate date={blog.updatedDate} />
+									<span style={{ color: "var(--fg-secondary)" }}>Email</span>
+									<span data-tina-field={tinaField(blog, "email")} style={{ color: "var(--fg-primary)" }}>
+										{blog.email}
 									</span>
 								</>
 							)}
@@ -68,7 +69,7 @@ export default function AdminBlogPost(props: Props) {
 					</div>
 				</div>
 				<div data-tina-field={tinaField(blog, "body")}>
-					<TinaMarkdown content={blog.body} components={{ VideoEmbed }} />
+					<TinaMarkdown content={blog.body} components={{ VideoEmbed: VideoEmbed as (props: object) => React.JSX.Element, Image: Image as (props: object) => React.JSX.Element }} />
 				</div>
 			</div>
 		</article>

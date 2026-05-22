@@ -25,6 +25,11 @@ export const BlogCollection: Collection = {
       type: "string",
     },
     {
+      name: "email",
+      label: "Email",
+      type: "string",
+    },
+    {
       name: "pubDate",
       label: "Publication Date",
       type: "datetime",
@@ -54,6 +59,28 @@ export const BlogCollection: Collection = {
               label: "Video URL",
               type: "string",
               required: true,
+            },
+            {
+              name: "caption",
+              label: "Caption",
+              type: "string",
+            },
+          ],
+        },
+        {
+          name: "Image",
+          label: "Image",
+          fields: [
+            {
+              name: "src",
+              label: "Source",
+              type: "image",
+              required: true,
+            },
+            {
+              name: "alt",
+              label: "Alt Text",
+              type: "string",
             },
             {
               name: "caption",

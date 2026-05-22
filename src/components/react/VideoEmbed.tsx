@@ -3,6 +3,7 @@ import React from 'react';
 type Props = {
   url: string;
   caption?: string;
+  [key: string]: unknown;
 };
 
 export default function VideoEmbed({ url, caption }: Props) {
