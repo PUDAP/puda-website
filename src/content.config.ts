@@ -13,8 +13,8 @@ const blog = defineCollection({
 
         return {
           ...node,
-          id: node?._sys.relativePath.replace(/\.mdx?$/, ""), // Generate clean URLs
-          tinaInfo: node?._sys, // Include Tina system info if needed
+          id: (node as any)?.slug ?? node?._sys.relativePath.replace(/\.mdx?$/, ""),
+          tinaInfo: node?._sys,
         };
       });
   },
@@ -26,6 +26,7 @@ const blog = defineCollection({
       relativePath: z.string(),
     }),
     title: z.string(),
+    slug: z.string().optional(),
     description: z.string(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
