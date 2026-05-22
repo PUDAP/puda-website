@@ -8,7 +8,7 @@ export const BlogCollection: Collection = {
   format: "mdx",
   ui: {
     router({ document }) {
-      return `/blog/${document._sys.filename}`;
+      return `/blog/${document.slug ?? document._sys.filename}`;
     },
   },
   fields: [
@@ -18,6 +18,12 @@ export const BlogCollection: Collection = {
       label: "Title",
       isTitle: true,
       required: true,
+    },
+    {
+      type: "string",
+      name: "slug",
+      label: "Slug",
+      description: "Custom URL slug (optional). Defaults to the filename if not set.",
     },
     {
       name: "description",

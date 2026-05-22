@@ -4,8 +4,6 @@
 
 /* ── Dark theme (default) ────────────────────────────────────── */
 :root {
-	--accent: #e8c200;
-	--accent-dark: #a88800;
 	--black: 15, 18, 25;
 	--gray: 96, 115, 159;
 	--gray-light: 229, 233, 240;
@@ -23,9 +21,8 @@
 	--fg-secondary: rgba(255, 255, 255, 0.70);
 
 	/* Accent */
-	--accent-lime: #e8ff9c;
-	--accent-lime-fg: #080908;
-	--accent-label: #e8ff9c;
+	--accent: #ffe600;
+	--accent-fg: #080908;
 
 	/* Secondary CTA button */
 	--cta-border: rgba(255, 255, 255, 0.15);
@@ -50,7 +47,7 @@
 	--cli-titlebar-border: rgba(255, 255, 255, 0.10);
 	--cli-title-fg: rgba(255, 255, 255, 0.40);
 	--cli-text: #d8ffd0;
-	--cli-prompt: #e8ff9c;
+	--cli-prompt: var(--accent);
 	--cli-output: #a3e0a0;
 
 	/* Blog */
@@ -59,7 +56,7 @@
 	--blog-code-bg: rgba(255, 255, 255, 0.08);
 	--blog-border: rgba(255, 255, 255, 0.10);
 	--blog-heading-fg: #f0f5ee;
-	--blog-link: #e8ff9c;
+	--blog-link: var(--accent);
 	--blog-link-hover: #ffffff;
 
 	/* Footer */
@@ -81,9 +78,8 @@
 	--fg-secondary: rgba(13, 17, 13, 0.65);
 
 	/* Accent */
-	--accent-lime: #e8ff9c;
-	--accent-lime-fg: #080908;
-	--accent-label: #437200;
+	--accent: #b39200;
+	--accent-fg: #ffffff;
 
 	/* Secondary CTA button */
 	--cta-border: rgba(13, 17, 13, 0.18);
@@ -117,7 +113,7 @@
 	--blog-code-bg: rgba(0, 0, 0, 0.06);
 	--blog-border: rgba(0, 0, 0, 0.10);
 	--blog-heading-fg: #0d110d;
-	--blog-link: #437200;
+	--blog-link: var(--accent);
 	--blog-link-hover: #0d110d;
 
 	/* Footer */
