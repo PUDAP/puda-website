@@ -77,6 +77,24 @@ This layer consists of multiple "thin" edge programs residing on individual mach
 
 ***
 
+### PUDA CLI
+
+<Image src="/blogs/first/puda-cli.svg" />
+
+LLMs are exceptionally good with text-based interfaces. CLIs and Markdown are a natural fit because:
+
+- Large chunks of LLM training data come from codebases and terminal interactions.
+- CLIs provide structured, parseable output.
+- Error messages become immediate context for self-correction.
+
+The PUDA CLI (implemented in Go) exposes the capabilities programmatically that an agent would use. This means humans, scripts, and LLMs all drive the platform through the same versioned surface. There is no hidden API reserved for internal tools. To use the CLI, simply ask the agent what the PUDA CLI can do.
+
+**Progressive Discovery** — The CLI tool is intentionally navigable by an AI agent without preloading long documentation. The agent can start from a top-level command, then progressively discover the next layer through the built-in help flag.
+
+**Errors as Navigation** — Every error contains both "what went wrong" and tells the agent "what to do instead." The error becomes immediate context for the AI Agent to rethink its approach or loop the human in for help.
+
+***
+
 ### Machine Integration
 
 Integrating a new machine into the PUDA runtime can be done in as little as 10 minutes, provided the SDK for your device is already configured with atomic commands and well-structured docstrings.
