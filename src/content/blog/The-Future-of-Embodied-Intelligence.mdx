@@ -1,7 +1,7 @@
 ---
 title: The Future of Embodied Intelligence
-description: WhitePaper v1.0
 slug: whitepaper
+description: WhitePaper v1.0
 email: hongzhao.tan@bears-berkeley.sg
 pubDate: 2026-05-22T14:15:00.000Z
 ---
@@ -18,7 +18,7 @@ This paper explores the technical specifications of PUDA, its integration with e
 
 ## Abstract
 
-<Image src="/blogs/first/the-legacy-paradigm.svg" />
+<Image src="/the_legacy_paradigm.png" />
 
 Modern laboratories, factories and real-world industrial processes increasingly rely on a heterogeneous mix of physical devices. Today, each device is typically driven by hand-written scripts that are tightly coupled to a specific vendor SDK, a specific communication protocol and a specific operating system. As AI agents become more and more capable of planning and executing complex real-world procedures, legacy fragmentation and isolated deployment becomes the central bottleneck to Physical AI.
 
@@ -33,9 +33,10 @@ Headless by design and message-driven at its core, PUDA shifts the paradigm by t
 The software stack for Physical AI today looks roughly like this: Most machines ship with their own SDK, protocol, and quirks. Protocols are written as one-off scripts, tightly bound to a single machine. Data provenance is informal — files on a hard disk or shared drive, manually named. Agents (LLMs) are bolted on top, usually by wrapping the same brittle scripts.
 
 This creates three problems:
-- **Rigid Coupling:** Leading to lack of standardization and severe fragmentation.
-- **Weak provenance:** Data produced cannot be linked to the exact commands that produced them, making reproducibility, validation and verification difficult.
-- **AI agents operate blindly:** They lack the structured context to understand the physical machine, the environment, the underlying execution of specific commands, and the structure of the data returned.
+
+* **Rigid Coupling:** Leading to lack of standardization and severe fragmentation.
+* **Weak provenance:** Data produced cannot be linked to the exact commands that produced them, making reproducibility, validation and verification difficult.
+* **AI agents operate blindly:** They lack the structured context to understand the physical machine, the environment, the underlying execution of specific commands, and the structure of the data returned.
 
 PUDA is designed to address all three simultaneously.
 
@@ -43,8 +44,8 @@ PUDA is designed to address all three simultaneously.
 
 The PUDA architecture is defined by two core principles that transform how autonomous intelligence interacts with the physical world:
 
-- **Logical Modularity:** By partitioning the stack into Agency, Communication, and Edge layers, PUDA ensures that the "brain" of the system is never hard-coded to the "nerves" and "muscles." This separation provides the foundation for hardware and LLM-agnosticism, allowing users to swap components as technology evolves.
-- **AI-Native:** PUDA is built "AI-first." By providing a fully observable environment where every command generates rich telemetry, we enable agents to operate with a high degree of "situational awareness." This leads to verifiable provenance and environment isolation, ensuring that every action is logged, secure, and executed within a safe sandbox.
+* **Logical Modularity:** By partitioning the stack into Agency, Communication, and Edge layers, PUDA ensures that the "brain" of the system is never hard-coded to the "nerves" and "muscles." This separation provides the foundation for hardware and LLM-agnosticism, allowing users to swap components as technology evolves.
+* **AI-Native:** PUDA is built "AI-first." By providing a fully observable environment where every command generates rich telemetry, we enable agents to operate with a high degree of "situational awareness." This leads to verifiable provenance and environment isolation, ensuring that every action is logged, secure, and executed within a safe sandbox.
 
 ## Architecture
 
@@ -56,24 +57,24 @@ The PUDA runtime environment is a microservices architecture designed for high-t
 
 The foundation of PUDA is a high-performance messaging backbone powered by NATS. In this layer, every entity — whether a hardware machine, a cloud service, or a CLI tool — operates as a first-class participant within a unique subject namespace. This message-centric design provides three core advantages:
 
-- **Loose Coupling:** All clients interact via subjects rather than direct IP addresses, meaning the Agentic Layer remains oblivious to the specific location of an Edge device.
-- **Uniform Observability:** Because every action is a discrete NATS message, the entire system state can be logged, audited, or replayed in real-time.
-- **Language Agnosticism:** Any service that can speak NATS can join the ecosystem, allowing for a diverse stack of Python, Go, or C++ components.
+* **Loose Coupling:** All clients interact via subjects rather than direct IP addresses, meaning the Agentic Layer remains oblivious to the specific location of an Edge device.
+* **Uniform Observability:** Because every action is a discrete NATS message, the entire system state can be logged, audited, or replayed in real-time.
+* **Language Agnosticism:** Any service that can speak NATS can join the ecosystem, allowing for a diverse stack of Python, Go, or C++ components.
 
 ### Agentic Layer
 
 Sitting at the top of the stack, the Agentic Layer serves as the system's intelligence center. While the Edge Layer handles *how* to move, the Agentic Layer decides *what* moves and *when* — reasoning over incoming telemetry to determine the next course of action. Its primary interface is the **PUDA CLI**, a powerful command-line tool through which agents and users alike submit protocols, inspect device state, and query execution history. The CLI will be covered in depth in a forthcoming post; for now it is enough to understand that it is the single entry point into the runtime.
 
-- **Orchestration & Protocols:** It writes protocols — declarative, high-level blueprints that define the sequence of operations required to achieve a specific outcome.
-- **Workflow Management:** It manages the complexities of execution, including temporal sequencing, cross-device coordination, and sophisticated error recovery to ensure the fleet operates flawlessly.
-- **User-Defined Logic (Agent Skills):** PUDA is designed for extensibility. Users can build custom workflows tailored to their specific use cases by writing their own Agent Skills, a set of pre-defined functional capabilities that the AI Agent will then use.
+* **Orchestration & Protocols:** It writes protocols — declarative, high-level blueprints that define the sequence of operations required to achieve a specific outcome.
+* **Workflow Management:** It manages the complexities of execution, including temporal sequencing, cross-device coordination, and sophisticated error recovery to ensure the fleet operates flawlessly.
+* **User-Defined Logic (Agent Skills):** PUDA is designed for extensibility. Users can build custom workflows tailored to their specific use cases by writing their own Agent Skills, a set of pre-defined functional capabilities that the AI Agent will then use.
 
 ### Edge Layer
 
 This layer consists of multiple "thin" edge programs residing on individual machines. These programs act as automatic translators rather than decision-makers.
 
-- **Role:** They bridge the gap between NATS messages and native machine drivers, and expose the machine's current state, position, and available commands.
-- **Philosophy:** To maintain stability, Edge programs contain zero workflow logic. They simply receive an atomic command, execute the physical task, and report the device's response back to the sender.
+* **Role:** They bridge the gap between NATS messages and native machine drivers, and expose the machine's current state, position, and available commands.
+* **Philosophy:** To maintain stability, Edge programs contain zero workflow logic. They simply receive an atomic command, execute the physical task, and report the device's response back to the sender.
 
 ***
 
@@ -83,9 +84,9 @@ This layer consists of multiple "thin" edge programs residing on individual mach
 
 LLMs are exceptionally good with text-based interfaces. CLIs and Markdown are a natural fit because:
 
-- Large chunks of LLM training data come from codebases and terminal interactions.
-- CLIs provide structured, parseable output.
-- Error messages become immediate context for self-correction.
+* Large chunks of LLM training data come from codebases and terminal interactions.
+* CLIs provide structured, parseable output.
+* Error messages become immediate context for self-correction.
 
 The PUDA CLI (implemented in Go) exposes the capabilities programmatically that an agent would use. This means humans, scripts, and LLMs all drive the platform through the same versioned surface. There is no hidden API reserved for internal tools. To use the CLI, simply ask the agent what the PUDA CLI can do.
 
@@ -105,11 +106,11 @@ The recommended path is our pre-configured Python template, which ships with all
 
 PUDA is headless by design — there is no bundled UI. The intended way to drive PUDA is through an AI Agent. We recommend [Claude](https://claude.ai), [Hermes Agent](https://hermes-agent.nousresearch.com/), or [Cursor](https://cursor.com) for finer control. Simply install the PUDA Agent Skills from `pudap/skills` to unlock:
 
-- Initializing projects
-- Writing protocols
-- Running experiments
-- Generating reports
-- and more
+* Initializing projects
+* Writing protocols
+* Running experiments
+* Generating reports
+* and more
 
 When a human-facing view is genuinely useful, the recommended path is for the agent itself to generate a GUI dashboard — for example, using [Streamlit](https://streamlit.io) via the PUDA CLI. Human UIs become derived artifacts of the agent-native platform, not a parallel stack to maintain.
 
@@ -125,7 +126,7 @@ Physical AI as an infrastructure problem. PUDA gives AI agents the stable, verif
 
 Some areas we are actively exploring:
 
-- Broader integration across lab and industrial equipment
-- Building custom hardware with an AI-First SDK
-- Distributed, multi-environment orchestration
-- High-fidelity Digital Twins integration using NVIDIA Isaac Sim
+* Broader integration across lab and industrial equipment
+* Building custom hardware with an AI-First SDK
+* Distributed, multi-environment orchestration
+* High-fidelity Digital Twins integration using NVIDIA Isaac Sim
