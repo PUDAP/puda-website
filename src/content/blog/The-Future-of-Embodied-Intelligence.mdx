@@ -42,9 +42,10 @@ PUDA is designed to address all three simultaneously.
 
 ## Design Goals
 
-The PUDA architecture is defined by two core principles that transform how autonomous intelligence interacts with the physical world:
+# The PUDA architecture is defined by two core principles that transform how autonomous intelligence interacts with the physical world:
 
-* **Logical Modularity:** By partitioning the stack into Agency, Communication, and Edge layers, PUDA ensures that the "brain" of the system is never hard-coded to the "nerves" and "muscles." This separation provides the foundation for hardware and LLM-agnosticism, allowing users to swap components as technology evolves.
+* **Modularity:** By partitioning the stack into Agency, Interface, Communication, and Edge layers, PUDA ensures that the "brain" of the system is never hard-coded to the "nerves" and "muscles." This separation provides the foundation for hardware and LLM-agnosticism, allowing users to swap components as technology evolves.
+* **Scalibility:** PUDA is made to scale, supporting up to 1,000,000 devices and 300,000 commands per second. Integration of a new machine designed to be straightforward and rapid, provided a good programmatic interface for the device.
 * **AI-Native:** PUDA is built "AI-first." By providing a fully observable environment where every command generates rich telemetry, we enable agents to operate with a high degree of "situational awareness." This leads to verifiable provenance and environment isolation, ensuring that every action is logged, secure, and executed within a safe sandbox.
 
 ## Architecture
