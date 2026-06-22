@@ -56,19 +56,23 @@ The PUDA runtime environment is a microservices architecture designed for high-t
 
 <Image src="/blogs/first/communication-layer.svg" />
 
-The foundation of PUDA is a high-performance messaging backbone powered by NATS. In this layer, every entity — whether a hardware machine, a cloud service, or a CLI tool — operates as a first-class participant within a unique subject namespace. This message-centric design provides three core advantages:
+The foundation of PUDA is a high-performance messaging backbone powered by [NATS](https://nats.io/). In this layer, every entity — whether a hardware machine, or a CLI tool, or a logger — operates as a first-class participant within a unique subject namespace. This message-centric design provides three core advantages:
 
 * **Loose Coupling:** All clients interact via subjects rather than direct IP addresses, meaning the Agentic Layer remains oblivious to the specific location of an Edge device.
 * **Uniform Observability:** Because every action is a discrete NATS message, the entire system state can be logged, audited, or replayed in real-time.
-* **Language Agnosticism:** Any service that can speak NATS can join the ecosystem, allowing for a diverse stack of Python, Go, or C++ components.
+* **Language Agnosticism:** Any service that can speak NATS can join the ecosystem, this means 11 officially supported languages and 18 community contributed.
 
 ### Agentic Layer
 
-Sitting at the top of the stack, the Agentic Layer serves as the system's intelligence center. While the Edge Layer handles *how* to move, the Agentic Layer decides *what* moves and *when* — reasoning over incoming telemetry to determine the next course of action. Its primary interface is the **PUDA CLI**, a powerful command-line tool through which agents and users alike submit protocols, inspect device state, and query execution history. The CLI will be covered in depth in a forthcoming post; for now it is enough to understand that it is the single entry point into the runtime.
+Sitting at the top of the stack, the Agentic Layer serves as the system's intelligence center. It decides *what* moves and *when* — reasoning over incoming telemetry to determine the next course of action. It contains our basic PUDA Skills, which are generic skills on how to use the PUDA CLI. 
 
 * **Orchestration & Protocols:** It writes protocols — declarative, high-level blueprints that define the sequence of operations required to achieve a specific outcome.
 * **Workflow Management:** It manages the complexities of execution, including temporal sequencing, cross-device coordination, and sophisticated error recovery to ensure the fleet operates flawlessly.
 * **User-Defined Logic (Agent Skills):** PUDA is designed for extensibility. Users can build custom workflows tailored to their specific use cases by writing their own Agent Skills, a set of pre-defined functional capabilities that the AI Agent will then use.
+
+### Interface Layer
+
+The primary interface is the PUDA CLI, a powerful command-line tool through which agents and users alike runs protocols, inspect device state, and query execution history. The CLI will be covered in depth in a forthcoming post; for now it is enough to understand that it is the single entry point into the PUDA runtime environment.
 
 ### Edge Layer
 
