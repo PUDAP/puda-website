@@ -105,7 +105,7 @@ The PUDA CLI (implemented in Go) exposes the capabilities programmatically that 
 
 Integrating a new machine into the PUDA runtime can be done in as little as 10 minutes, provided the SDK for your device is already configured with atomic commands and well-structured docstrings.
 
-The recommended path is our pre-configured Python template, which ships with all the NATS communication logic pre-wired. This lets you focus entirely on device-specific logic and connection handling, rather than the plumbing of the runtime.
+The recommended path is using our [python template](https://github.com/PUDAP/edge-python-template), which ships with all the NATS communication logic pre-wired. This lets you focus entirely on device-specific logic and connection handling, rather than the plumbing of the runtime.
 
 ### Agent Integration
 
@@ -117,7 +117,7 @@ PUDA is headless by design — there is no bundled UI. The intended way to drive
 * Generating reports
 * and more
 
-When a human-facing view is genuinely useful, the recommended path is for the agent itself to generate a GUI dashboard — for example, using [Streamlit](https://streamlit.io) via the PUDA CLI. Human UIs become derived artifacts of the agent-native platform, not a parallel stack to maintain.
+When a human-facing view is genuinely useful, the recommended path is to ask the agent itself to generate a GUI dashboard — for example, using [Streamlit](https://streamlit.io) via the PUDA CLI. Human UIs become derived artifacts of the agent-native platform, not a parallel stack to maintain.
 
 ### Seamless, Scalable Deployment
 
@@ -131,7 +131,7 @@ Physical AI as an infrastructure problem. PUDA gives AI agents the stable, verif
 
 Some areas we are actively exploring:
 
-* Broader integration across lab and industrial equipment
+* Broader integration across common lab and industrial equipment
 * Building custom hardware with an AI-First SDK
 * Distributed, multi-environment orchestration
 * High-fidelity Digital Twins integration using NVIDIA Isaac Sim
