@@ -42,7 +42,7 @@ PUDA is designed to address all three simultaneously.
 
 ## Design Goals
 
-# The PUDA architecture is defined by two core principles that transform how autonomous intelligence interacts with the physical world:
+The PUDA architecture is defined by two core principles that transform how autonomous intelligence interacts with the physical world:
 
 * **Modularity:** By partitioning the stack into Agency, Interface, Communication, and Edge layers, PUDA ensures that the "brain" of the system is never hard-coded to the "nerves" and "muscles." This separation provides the foundation for hardware and LLM-agnosticism, allowing users to swap components as technology evolves.
 * **Scalibility:** PUDA is made to scale, supporting up to 1,000,000 devices and 300,000 commands per second. Integration of a new machine designed to be straightforward and rapid, provided a good programmatic interface for the device.
@@ -64,7 +64,7 @@ The foundation of PUDA is a high-performance messaging backbone powered by [NATS
 
 ### Agentic Layer
 
-Sitting at the top of the stack, the Agentic Layer serves as the system's intelligence center. It decides *what* moves and *when* — reasoning over incoming telemetry to determine the next course of action. It contains our basic PUDA Skills, which are generic skills on how to use the PUDA CLI. 
+Sitting at the top of the stack, the Agentic Layer serves as the system's intelligence center. It decides *what* moves and *when* — reasoning over incoming telemetry to determine the next course of action. It contains our basic PUDA Skills, which are generic skills on how to use the PUDA CLI.
 
 * **Orchestration & Protocols:** It writes protocols — declarative, high-level blueprints that define the sequence of operations required to achieve a specific outcome.
 * **Workflow Management:** It manages the complexities of execution, including temporal sequencing, cross-device coordination, and sophisticated error recovery to ensure the fleet operates flawlessly.
