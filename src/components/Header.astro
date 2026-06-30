@@ -15,6 +15,18 @@ import IconLink from "./react/IconLink";
 			}
 		</div>
 		<div class="right-controls">
+			<a
+				class="docs-link"
+				href="https://docs.puda.co"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				Docs
+				<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<path d="M7 17 17 7"/>
+					<path d="M7 7h10v10"/>
+				</svg>
+			</a>
 			<button
 				id="theme-toggle"
 				aria-label="Toggle light/dark mode"
@@ -119,6 +131,21 @@ import IconLink from "./react/IconLink";
 		display: flex;
 		align-items: center;
 		gap: 0.5em;
+	}
+	.docs-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding: 0.45rem 0.65rem;
+		border: 1px solid var(--header-border);
+		border-radius: 999px;
+		color: var(--header-fg);
+		font-size: 0.9rem;
+		line-height: 1;
+	}
+	.docs-link:hover {
+		border-color: var(--accent);
+		color: var(--header-nav-hover);
 	}
 	.social-links,
 	.social-links a {
