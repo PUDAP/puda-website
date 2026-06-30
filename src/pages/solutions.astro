@@ -1,0 +1,436 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const solutions = [
+  {
+    label: "Research labs",
+    title: "Run instruments through a shared agent layer",
+    body:
+      "Connect robotics, analytical instruments, notebooks, and approval flows behind typed commands that researchers can inspect and reproduce.",
+  },
+  {
+    label: "Automation teams",
+    title: "Move from scripts to reliable physical workflows",
+    body:
+      "Turn one-off device scripts into versioned protocols with replayable runs, human gates, and clear operational state.",
+  },
+  {
+    label: "AI builders",
+    title: "Give agents physical-world tools without losing control",
+    body:
+      "Expose hardware capabilities to models through narrow, auditable interfaces that keep unsupported or unsafe actions visible.",
+  },
+];
+
+const workflow = [
+  "Discover available machines, tools, and constraints.",
+  "Generate a protocol with typed commands and safety checks.",
+  "Execute through edge clients while recording every action.",
+  "Replay the run with data, approvals, and agent decisions aligned.",
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title="PUDA Solutions"
+      description="Solutions for labs and automation teams building with PUDA, the runtime environment for Physical AI."
+    />
+  </head>
+
+  <body class="solutions-body">
+    <Header />
+
+    <main class="solutions-main">
+      <div class="solutions-grid-bg" />
+      <div class="solutions-radial-bg" />
+      <div class="solutions-vignette" />
+
+      <section class="solutions-hero">
+        <p class="solutions-label">Solutions</p>
+        <div class="solutions-hero-grid">
+          <h1 class="solutions-heading">
+            Physical AI workflows for real labs
+          </h1>
+          <div class="solutions-intro">
+            <p>
+              PUDA gives teams a runtime for connecting AI agents to instruments,
+              robots, datastreams, approvals, and audit trails. This draft page
+              sketches the main solution areas for organizations moving physical
+              experimentation from manual operation to inspectable automation.
+            </p>
+            <div class="solutions-actions">
+              <a class="solutions-primary" href="/demo">Explore demo</a>
+              <a class="solutions-secondary" href="https://docs.puda.co" target="_blank" rel="noopener noreferrer">
+                Read docs
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="solutions-band">
+        <div class="solutions-section-head">
+          <p class="solutions-label">Use cases</p>
+          <h2>Where PUDA fits</h2>
+        </div>
+
+        <div class="solutions-cards">
+          {
+            solutions.map((solution) => (
+              <article class="solutions-card">
+                <p>{solution.label}</p>
+                <h3>{solution.title}</h3>
+                <span>{solution.body}</span>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="solutions-split">
+        <div>
+          <p class="solutions-label">Runtime model</p>
+          <h2>One control plane from request to hardware action</h2>
+        </div>
+        <div class="solutions-copy">
+          <p>
+            PUDA is designed for environments where an AI agent has to operate
+            physical devices, but every action still needs clear provenance. The
+            platform keeps device capabilities, generated protocols, run state,
+            and resulting data in one path.
+          </p>
+          <p>
+            The result is an automation layer that can be tested, reviewed, and
+            replayed by both researchers and software teams.
+          </p>
+        </div>
+      </section>
+
+      <section class="solutions-workflow">
+        <div class="solutions-section-head">
+          <p class="solutions-label">Workflow</p>
+          <h2>From agent intent to replayable experiment</h2>
+        </div>
+
+        <ol class="solutions-steps">
+          {
+            workflow.map((step, index) => (
+              <li>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <p>{step}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .solutions-body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-primary);
+    color: var(--fg-primary);
+  }
+
+  .solutions-main {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    padding: 5rem 1.5rem 6rem;
+  }
+
+  .solutions-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232, 255, 156, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232, 255, 156, 0.05) 1px, transparent 1px);
+    background-size: 120px 120px;
+    opacity: 0.42;
+    pointer-events: none;
+  }
+
+  .solutions-radial-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(232, 255, 156, 0.14), transparent 35%),
+      radial-gradient(circle at 86% 18%, rgba(87, 190, 255, 0.11), transparent 32%),
+      radial-gradient(circle at 50% 100%, rgba(212, 160, 75, 0.09), transparent 38%);
+    pointer-events: none;
+  }
+
+  .solutions-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.24) 48%, rgba(0, 0, 0, 0.76) 100%);
+    pointer-events: none;
+  }
+
+  [data-theme="light"] .solutions-grid-bg,
+  [data-theme="light"] .solutions-radial-bg,
+  [data-theme="light"] .solutions-vignette {
+    display: none;
+  }
+
+  .solutions-hero,
+  .solutions-band,
+  .solutions-split,
+  .solutions-workflow {
+    position: relative;
+    z-index: 10;
+    width: min(100%, 72rem);
+    margin: 0 auto;
+  }
+
+  .solutions-hero {
+    padding-bottom: 5rem;
+  }
+
+  .solutions-hero-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1.12fr) minmax(18rem, 0.88fr);
+    align-items: end;
+  }
+
+  .solutions-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.42em;
+    color: var(--accent);
+    margin: 0 0 1.25rem;
+  }
+
+  .solutions-heading {
+    font-size: clamp(3rem, 7.5vw, 6.5rem);
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: -0.065em;
+    color: var(--fg-primary);
+    margin: 0;
+    max-width: 54rem;
+  }
+
+  .solutions-intro {
+    color: var(--fg-secondary);
+    font-size: 1.08rem;
+    line-height: 1.8;
+  }
+
+  .solutions-intro p,
+  .solutions-copy p {
+    margin: 0;
+  }
+
+  .solutions-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  .solutions-primary,
+  .solutions-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.85rem 1.2rem;
+    font-size: 0.9rem;
+    line-height: 1;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .solutions-primary {
+    background: var(--accent);
+    color: var(--accent-fg);
+  }
+
+  .solutions-primary:hover {
+    background: #ffffff;
+  }
+
+  [data-theme="light"] .solutions-primary:hover {
+    background: #d0f060;
+  }
+
+  .solutions-secondary {
+    border: 1px solid var(--cta-border);
+    color: var(--cta-fg);
+  }
+
+  .solutions-secondary:hover {
+    background: var(--cta-hover-bg);
+  }
+
+  .solutions-band,
+  .solutions-split,
+  .solutions-workflow {
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+    padding: 3.5rem 0;
+  }
+
+  [data-theme="light"] .solutions-band,
+  [data-theme="light"] .solutions-split,
+  [data-theme="light"] .solutions-workflow {
+    border-top-color: rgba(0, 0, 0, 0.09);
+  }
+
+  .solutions-section-head {
+    max-width: 42rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .solutions-section-head h2,
+  .solutions-split h2 {
+    color: var(--fg-primary);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.055em;
+    margin: 0;
+  }
+
+  .solutions-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .solutions-card {
+    min-height: 17rem;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    padding: 1.4rem;
+    background: rgba(255, 255, 255, 0.03);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .solutions-card:hover {
+    border-color: rgba(232, 255, 156, 0.24);
+    background: rgba(232, 255, 156, 0.035);
+  }
+
+  [data-theme="light"] .solutions-card {
+    border-color: rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  [data-theme="light"] .solutions-card:hover {
+    border-color: rgba(67, 114, 0, 0.24);
+    background: rgba(67, 114, 0, 0.04);
+  }
+
+  .solutions-card p {
+    color: var(--accent);
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin: 0 0 1.25rem;
+  }
+
+  .solutions-card h3 {
+    color: var(--fg-primary);
+    font-size: 1.35rem;
+    font-weight: 400;
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+    margin: 0 0 1rem;
+  }
+
+  .solutions-card span {
+    color: var(--fg-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-top: auto;
+  }
+
+  .solutions-split {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(18rem, 1.1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .solutions-copy {
+    color: var(--fg-secondary);
+    font-size: 1rem;
+    line-height: 1.8;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .solutions-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.09);
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  [data-theme="light"] .solutions-steps {
+    border-color: rgba(0, 0, 0, 0.09);
+    background: rgba(0, 0, 0, 0.09);
+  }
+
+  .solutions-steps li {
+    min-height: 12rem;
+    padding: 1.25rem;
+    background: rgba(8, 9, 8, 0.82);
+  }
+
+  [data-theme="light"] .solutions-steps li {
+    background: rgba(245, 247, 242, 0.96);
+  }
+
+  .solutions-steps span {
+    display: block;
+    color: var(--accent);
+    font-family: monospace;
+    font-size: 0.8rem;
+    margin-bottom: 2rem;
+  }
+
+  .solutions-steps p {
+    color: var(--fg-primary);
+    font-size: 1rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .solutions-hero-grid,
+    .solutions-split {
+      grid-template-columns: 1fr;
+    }
+
+    .solutions-cards,
+    .solutions-steps {
+      grid-template-columns: 1fr;
+    }
+
+    .solutions-card,
+    .solutions-steps li {
+      min-height: auto;
+    }
+  }
+</style>
