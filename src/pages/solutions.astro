@@ -5,30 +5,56 @@ import Footer from "../components/Footer.astro";
 
 const solutions = [
   {
-    label: "Research labs",
-    title: "Run instruments through a shared agent layer",
+    label: "Machine execution",
+    title: "Run physical protocols through a controlled runtime",
     body:
-      "Connect robotics, analytical instruments, notebooks, and approval flows behind typed commands that researchers can inspect and reproduce.",
+      "Coordinate machines, robots, sensors, edge clients, and human approvals through typed commands that can be reviewed before and after execution.",
   },
   {
-    label: "Automation teams",
-    title: "Move from scripts to reliable physical workflows",
+    label: "Data trails",
+    title: "Capture every action, measurement, and decision",
     body:
-      "Turn one-off device scripts into versioned protocols with replayable runs, human gates, and clear operational state.",
+      "Keep the agent conversation, requested tools, machine commands, run state, raw outputs, and derived files aligned in one inspectable trail.",
   },
   {
-    label: "AI builders",
-    title: "Give agents physical-world tools without losing control",
+    label: "Closed loop",
+    title: "Turn analysis into the next action",
     body:
-      "Expose hardware capabilities to models through narrow, auditable interfaces that keep unsupported or unsafe actions visible.",
+      "Feed provenance-backed results into analysis and planning so the next protocol, task, or control decision is grounded in what actually happened.",
   },
 ];
 
-const workflow = [
-  "Discover available machines, tools, and constraints.",
-  "Generate a protocol with typed commands and safety checks.",
-  "Execute through edge clients while recording every action.",
-  "Replay the run with data, approvals, and agent decisions aligned.",
+const useCases = [
+  {
+    title: "Robotic workcells",
+    body:
+      "Coordinate arms, grippers, sensors, and inspection tools while preserving the full command and measurement history.",
+  },
+  {
+    title: "Autonomous test systems",
+    body:
+      "Run test stands, characterization equipment, and validation rigs with repeatable protocols and traceable outputs.",
+  },
+  {
+    title: "Industrial pilots",
+    body:
+      "Connect AI planning to machines on pilot lines where every action needs operator review, limits, and evidence.",
+  },
+  {
+    title: "Field operations",
+    body:
+      "Operate distributed physical assets through edge clients while keeping connectivity gaps, approvals, and data capture visible.",
+  },
+  {
+    title: "Closed-loop optimization",
+    body:
+      "Analyze run results and feed verified outcomes into the next action without losing provenance between iterations.",
+  },
+  {
+    title: "Human-in-the-loop control",
+    body:
+      "Let agents propose actions while people approve critical steps and audit what happened afterward.",
+  },
 ];
 ---
 
@@ -37,7 +63,7 @@ const workflow = [
   <head>
     <BaseHead
       title="PUDA Solutions"
-      description="Solutions for labs and automation teams building with PUDA, the runtime environment for Physical AI."
+      description="End-to-end Physical AI workflows from machine execution to data provenance, analysis, and closed-loop operation."
     />
   </head>
 
@@ -53,14 +79,14 @@ const workflow = [
         <p class="solutions-label">Solutions</p>
         <div class="solutions-hero-grid">
           <h1 class="solutions-heading">
-            Physical AI workflows for real labs
+            Make your machines Physical AI ready
           </h1>
           <div class="solutions-intro">
             <p>
-              PUDA gives teams a runtime for connecting AI agents to instruments,
-              robots, datastreams, approvals, and audit trails. This draft page
-              sketches the main solution areas for organizations moving physical
-              experimentation from manual operation to inspectable automation.
+              PUDA gives teams the runtime layer that makes physical systems
+              agent-ready: execute typed machine actions, preserve the data
+              trail, prove where results came from, analyze outcomes, and close
+              the loop into the next physical action.
             </p>
             <div class="solutions-actions">
               <a class="solutions-primary" href="/demo">Explore demo</a>
@@ -75,7 +101,7 @@ const workflow = [
       <section class="solutions-band">
         <div class="solutions-section-head">
           <p class="solutions-label">Use cases</p>
-          <h2>Where PUDA fits</h2>
+          <h2>The Physical AI lifecycle in one system</h2>
         </div>
 
         <div class="solutions-cards">
@@ -91,41 +117,32 @@ const workflow = [
         </div>
       </section>
 
-      <section class="solutions-split">
-        <div>
-          <p class="solutions-label">Runtime model</p>
-          <h2>One control plane from request to hardware action</h2>
+      <section class="solutions-use-cases">
+        <div class="solutions-section-head">
+          <p class="solutions-label">Applications</p>
+          <h2>Use cases for Physical AI teams</h2>
         </div>
-        <div class="solutions-copy">
-          <p>
-            PUDA is designed for environments where an AI agent has to operate
-            physical devices, but every action still needs clear provenance. The
-            platform keeps device capabilities, generated protocols, run state,
-            and resulting data in one path.
-          </p>
-          <p>
-            The result is an automation layer that can be tested, reviewed, and
-            replayed by both researchers and software teams.
-          </p>
+
+        <div class="solutions-use-case-grid">
+          {
+            useCases.map((useCase) => (
+              <article class="solutions-use-case">
+                <h3>{useCase.title}</h3>
+                <p>{useCase.body}</p>
+              </article>
+            ))
+          }
         </div>
       </section>
 
-      <section class="solutions-workflow">
-        <div class="solutions-section-head">
-          <p class="solutions-label">Workflow</p>
-          <h2>From agent intent to replayable experiment</h2>
+      <section class="solutions-contact">
+        <p class="solutions-label">Contact us</p>
+        <div class="solutions-contact-row">
+          <h2>Building Physical AI workflows?</h2>
+          <a class="solutions-contact-link" href="mailto:bearspuda@gmail.com">
+            bearspuda@gmail.com
+          </a>
         </div>
-
-        <ol class="solutions-steps">
-          {
-            workflow.map((step, index) => (
-              <li>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <p>{step}</p>
-              </li>
-            ))
-          }
-        </ol>
       </section>
     </main>
 
@@ -185,8 +202,8 @@ const workflow = [
 
   .solutions-hero,
   .solutions-band,
-  .solutions-split,
-  .solutions-workflow {
+  .solutions-use-cases,
+  .solutions-contact {
     position: relative;
     z-index: 10;
     width: min(100%, 72rem);
@@ -200,8 +217,8 @@ const workflow = [
   .solutions-hero-grid {
     display: grid;
     gap: 2rem;
-    grid-template-columns: minmax(0, 1.12fr) minmax(18rem, 0.88fr);
-    align-items: end;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 1fr);
+    align-items: center;
   }
 
   .solutions-label {
@@ -228,8 +245,7 @@ const workflow = [
     line-height: 1.8;
   }
 
-  .solutions-intro p,
-  .solutions-copy p {
+  .solutions-intro p {
     margin: 0;
   }
 
@@ -276,15 +292,15 @@ const workflow = [
   }
 
   .solutions-band,
-  .solutions-split,
-  .solutions-workflow {
+  .solutions-use-cases,
+  .solutions-contact {
     border-top: 1px solid rgba(255, 255, 255, 0.09);
     padding: 3.5rem 0;
   }
 
   [data-theme="light"] .solutions-band,
-  [data-theme="light"] .solutions-split,
-  [data-theme="light"] .solutions-workflow {
+  [data-theme="light"] .solutions-use-cases,
+  [data-theme="light"] .solutions-contact {
     border-top-color: rgba(0, 0, 0, 0.09);
   }
 
@@ -293,8 +309,7 @@ const workflow = [
     margin-bottom: 1.75rem;
   }
 
-  .solutions-section-head h2,
-  .solutions-split h2 {
+  .solutions-section-head h2 {
     color: var(--fg-primary);
     font-size: clamp(2rem, 4vw, 3.5rem);
     font-weight: 400;
@@ -359,27 +374,9 @@ const workflow = [
     margin-top: auto;
   }
 
-  .solutions-split {
+  .solutions-use-case-grid {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(18rem, 1.1fr);
-    gap: 3rem;
-    align-items: start;
-  }
-
-  .solutions-copy {
-    color: var(--fg-secondary);
-    font-size: 1rem;
-    line-height: 1.8;
-    display: grid;
-    gap: 1rem;
-  }
-
-  .solutions-steps {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1px;
     border: 1px solid rgba(255, 255, 255, 0.09);
     background: rgba(255, 255, 255, 0.09);
@@ -387,50 +384,97 @@ const workflow = [
     overflow: hidden;
   }
 
-  [data-theme="light"] .solutions-steps {
+  [data-theme="light"] .solutions-use-case-grid {
     border-color: rgba(0, 0, 0, 0.09);
     background: rgba(0, 0, 0, 0.09);
   }
 
-  .solutions-steps li {
-    min-height: 12rem;
-    padding: 1.25rem;
+  .solutions-use-case {
+    min-height: 11rem;
+    padding: 1.35rem;
     background: rgba(8, 9, 8, 0.82);
   }
 
-  [data-theme="light"] .solutions-steps li {
+  [data-theme="light"] .solutions-use-case {
     background: rgba(245, 247, 242, 0.96);
   }
 
-  .solutions-steps span {
-    display: block;
-    color: var(--accent);
-    font-family: monospace;
-    font-size: 0.8rem;
-    margin-bottom: 2rem;
+  .solutions-use-case h3 {
+    color: var(--fg-primary);
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.75rem;
   }
 
-  .solutions-steps p {
-    color: var(--fg-primary);
-    font-size: 1rem;
-    line-height: 1.55;
+  .solutions-use-case p {
+    color: var(--fg-secondary);
+    font-size: 0.94rem;
+    line-height: 1.7;
     margin: 0;
   }
 
+  .solutions-contact {
+    padding-bottom: 0;
+  }
+
+  .solutions-contact-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .solutions-contact h2 {
+    color: var(--fg-primary);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.055em;
+    margin: 0;
+  }
+
+  .solutions-contact-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--cta-border);
+    border-radius: 999px;
+    color: var(--cta-fg);
+    font-family: monospace;
+    font-size: 0.95rem;
+    line-height: 1;
+    padding: 0.9rem 1.2rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .solutions-contact-link:hover {
+    background: var(--cta-hover-bg);
+    border-color: var(--accent);
+    color: var(--fg-primary);
+  }
+
   @media (max-width: 900px) {
-    .solutions-hero-grid,
-    .solutions-split {
+    .solutions-hero-grid {
       grid-template-columns: 1fr;
     }
 
     .solutions-cards,
-    .solutions-steps {
+    .solutions-use-case-grid {
       grid-template-columns: 1fr;
     }
 
     .solutions-card,
-    .solutions-steps li {
+    .solutions-use-case {
       min-height: auto;
+    }
+
+    .solutions-contact-row {
+      align-items: flex-start;
+      flex-direction: column;
     }
   }
 </style>
