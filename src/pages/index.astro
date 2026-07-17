@@ -7,6 +7,8 @@ import CliAnimation from '../components/home/CliAnimation.astro';
 import VideoPlaceholder from '../components/VideoPlaceholder.astro';
 const DEMO_VIDEO_EMBED =
   "https://www.youtube.com/embed/b6zpEGC47dM";
+const SECOND_DEMO_VIDEO_EMBED =
+  "https://www.youtube.com/embed/rOKpWaq1ALw";
 ---
 
 <!doctype html>
@@ -55,7 +57,16 @@ const DEMO_VIDEO_EMBED =
             </h2>
           </div>
         </div>
+        <p class="video-description mb-4 text-base md:text-lg">
+          Controlling lab devices using telegram
+        </p>
         <VideoPlaceholder embedSrc={DEMO_VIDEO_EMBED} title="PUDA demo video" />
+        <div class="mt-10 md:mt-14">
+          <p class="video-description mb-4 text-base md:text-lg">
+            Controlling lab devices using cursor
+          </p>
+          <VideoPlaceholder embedSrc={SECOND_DEMO_VIDEO_EMBED} title="PUDA demo video 2" />
+        </div>
       </div>
     </section>
 
@@ -119,5 +130,9 @@ const DEMO_VIDEO_EMBED =
 
   .video-heading {
     color: var(--fg-primary);
+  }
+
+  .video-description {
+    color: var(--fg-secondary);
   }
 </style>
