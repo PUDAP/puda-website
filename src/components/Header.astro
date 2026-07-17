@@ -1,11 +1,11 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
 import config from "../content/config/config.json";
-import IconLink from "./react/IconLink";
+import { ExternalLink, Menu, X } from "lucide-react";
 ---
 
 <header>
-	<nav>
+	<nav class="desktop-nav" aria-label="Primary navigation">
 		<h2><a href="/">{config.seo.title}</a></h2>
 		<div class="internal-links">
 			{
@@ -28,7 +28,7 @@ import IconLink from "./react/IconLink";
 				</svg>
 			</a>
 			<button
-				id="theme-toggle"
+				class="theme-toggle"
 				aria-label="Toggle light/dark mode"
 				title="Toggle light/dark mode"
 			>
@@ -51,7 +51,49 @@ import IconLink from "./react/IconLink";
 			</button>
 		</div>
 	</nav>
+
+	<div class="mobile-nav">
+		<h2><a href="/">{config.seo.title}</a></h2>
+		<div class="mobile-actions">
+			<button
+				class="theme-toggle"
+				aria-label="Toggle light/dark mode"
+				title="Toggle light/dark mode"
+			>
+				<svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
+				</svg>
+				<svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+			</button>
+			<button
+				id="menu-open"
+				class="menu-button"
+				aria-label="Open navigation menu"
+				aria-controls="mobile-menu"
+				aria-expanded="false"
+			>
+				<Menu size={20} aria-hidden="true" />
+			</button>
+		</div>
+	</div>
 </header>
+
+<div id="menu-backdrop" class="menu-backdrop" aria-hidden="true"></div>
+<aside id="mobile-menu" class="mobile-menu" role="dialog" aria-modal="true" aria-label="Mobile navigation" aria-hidden="true" inert>
+	<div class="menu-heading">
+		<span>{config.seo.title}</span>
+		<button id="menu-close" class="menu-button" aria-label="Close navigation menu">
+			<X size={20} aria-hidden="true" />
+		</button>
+	</div>
+	<nav class="mobile-menu-links" aria-label="Primary navigation">
+		{config.nav.map((nav) => <HeaderLink href={nav.link}>{nav.title}</HeaderLink>)}
+	</nav>
+	<a class="mobile-docs-link" href="https://docs.puda.co" target="_blank" rel="noopener noreferrer">
+		Docs
+		<ExternalLink size={16} aria-hidden="true" />
+	</a>
+</aside>
 
 <script>
 	function applyTheme(theme: string) {
@@ -66,21 +108,60 @@ import IconLink from "./react/IconLink";
 	}
 
 	function initToggle() {
-		const btn = document.getElementById('theme-toggle');
-		if (!btn) return;
-		btn.addEventListener('click', () => {
-			const current = document.documentElement.getAttribute('data-theme') ?? 'dark';
-			applyTheme(current === 'dark' ? 'light' : 'dark');
+		document.querySelectorAll<HTMLButtonElement>('.theme-toggle').forEach((btn) => {
+			btn.onclick = () => {
+				const current = document.documentElement.getAttribute('data-theme') ?? 'dark';
+				applyTheme(current === 'dark' ? 'light' : 'dark');
+			};
 		});
 	}
 
+	function initMobileMenu() {
+		const openButton = document.getElementById('menu-open');
+		const closeButton = document.getElementById('menu-close');
+		const menu = document.getElementById('mobile-menu');
+		const backdrop = document.getElementById('menu-backdrop');
+		if (!openButton || !closeButton || !menu || !backdrop) return;
+
+		const closeMenu = () => {
+			menu.classList.remove('is-open');
+			backdrop.classList.remove('is-open');
+			menu.setAttribute('aria-hidden', 'true');
+			menu.inert = true;
+			openButton.setAttribute('aria-expanded', 'false');
+			document.body.classList.remove('menu-open');
+		};
+
+		openButton.onclick = () => {
+			menu.classList.add('is-open');
+			backdrop.classList.add('is-open');
+			menu.setAttribute('aria-hidden', 'false');
+			menu.inert = false;
+			openButton.setAttribute('aria-expanded', 'true');
+			document.body.classList.add('menu-open');
+			closeButton.focus();
+		};
+		closeButton.onclick = closeMenu;
+		backdrop.onclick = closeMenu;
+		menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+		menu.onkeydown = (event) => {
+			if (event.key === 'Escape' && menu.classList.contains('is-open')) {
+				closeMenu();
+				openButton.focus();
+			}
+		};
+		closeMenu();
+	}
+
 	initToggle();
+	initMobileMenu();
 
 	// After each client-side navigation the <html> element is swapped in fresh
 	// (without data-theme), so we must re-apply the stored preference.
 	document.addEventListener('astro:after-swap', () => {
 		restoreTheme();
 		initToggle();
+		initMobileMenu();
 	});
 </script>
 
@@ -107,22 +188,22 @@ import IconLink from "./react/IconLink";
 		color: var(--header-fg);
 		transition: color 0.15s;
 	}
-	nav {
+	.desktop-nav {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 	}
-	nav a {
+	.desktop-nav a {
 		padding: 1em 0.5em;
 		color: var(--header-nav-fg);
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
 		transition: color 0.15s;
 	}
-	nav a:hover {
+	.desktop-nav a:hover {
 		color: var(--header-nav-hover);
 	}
-	nav a.active {
+	.desktop-nav a.active {
 		text-decoration: none;
 		color: var(--header-nav-hover);
 		border-bottom-color: var(--accent);
@@ -153,7 +234,8 @@ import IconLink from "./react/IconLink";
 	}
 
 	/* Theme toggle button */
-	#theme-toggle {
+	.theme-toggle,
+	.menu-button {
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -167,8 +249,14 @@ import IconLink from "./react/IconLink";
 		transition: background 0.15s ease, color 0.15s ease;
 		flex-shrink: 0;
 	}
-	#theme-toggle:hover {
+	.theme-toggle:hover,
+	.menu-button:hover {
 		background: var(--toggle-hover-bg);
+	}
+	.mobile-nav,
+	.mobile-menu,
+	.menu-backdrop {
+		display: none;
 	}
 
 	/* Show/hide icons based on current theme */
@@ -181,8 +269,103 @@ import IconLink from "./react/IconLink";
 	[data-theme="light"] .icon-moon { display: none; }
 
 	@media (max-width: 720px) {
-		.social-links {
+		header {
+			padding: 0 1rem;
+		}
+		.desktop-nav {
 			display: none;
+		}
+		.mobile-nav {
+			display: flex;
+			height: 3.75rem;
+			align-items: center;
+			justify-content: space-between;
+		}
+		.mobile-actions {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+		.menu-backdrop {
+			display: block;
+			position: fixed;
+			inset: 0;
+			z-index: 80;
+			background: rgba(0, 0, 0, 0.56);
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 0.2s ease, visibility 0.2s ease;
+		}
+		.menu-backdrop.is-open {
+			opacity: 1;
+			visibility: visible;
+		}
+		.mobile-menu {
+			display: flex;
+			position: fixed;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			z-index: 90;
+			width: min(84vw, 21rem);
+			padding: 1rem 1.25rem 1.5rem;
+			flex-direction: column;
+			background: var(--bg-secondary);
+			border-left: 1px solid var(--header-border);
+			box-shadow: -18px 0 48px rgba(0, 0, 0, 0.28);
+			transform: translateX(100%);
+			visibility: hidden;
+			transition: transform 0.24s ease, visibility 0.24s ease;
+		}
+		.mobile-menu.is-open {
+			transform: translateX(0);
+			visibility: visible;
+		}
+		.menu-heading {
+			display: flex;
+			height: 2.75rem;
+			align-items: center;
+			justify-content: space-between;
+			color: var(--header-fg);
+			font-weight: 700;
+		}
+		.mobile-menu-links {
+			display: flex;
+			margin-top: 2rem;
+			flex-direction: column;
+		}
+		.mobile-menu-links a {
+			padding: 1rem 0;
+			border-bottom: 1px solid var(--header-border);
+			color: var(--header-nav-fg);
+			font-size: 1.125rem;
+		}
+		.mobile-menu-links a:hover,
+		.mobile-menu-links a.active {
+			color: var(--header-nav-hover);
+		}
+		.mobile-menu-links a.active {
+			border-bottom-color: var(--accent);
+			text-decoration: none;
+		}
+		.mobile-docs-link {
+			display: flex;
+			margin-top: auto;
+			padding: 0.875rem 0;
+			align-items: center;
+			justify-content: space-between;
+			color: var(--header-fg);
+			text-decoration: none;
+		}
+		:global(body.menu-open) {
+			overflow: hidden;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.mobile-menu,
+		.menu-backdrop {
+			transition: none;
 		}
 	}
 </style>
