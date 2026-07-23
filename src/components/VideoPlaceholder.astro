@@ -5,11 +5,17 @@ interface Props {
 }
 
 const { embedSrc, title } = Astro.props;
+
+const videoUrl = new URL(embedSrc);
+const iframeSrc =
+  videoUrl.hostname === "youtu.be"
+    ? `https://www.youtube.com/embed/${videoUrl.pathname.slice(1)}`
+    : embedSrc;
 ---
 
 <div class="relative w-full overflow-hidden rounded-[2rem] bg-black" style="aspect-ratio: 16/9;">
   <iframe
-    src={embedSrc}
+    src={iframeSrc}
     title={title}
     class="absolute inset-0 h-full w-full border-0"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
