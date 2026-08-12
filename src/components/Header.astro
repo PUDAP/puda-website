@@ -9,9 +9,18 @@ import { ExternalLink, Menu, X } from "lucide-react";
 		<h2><a href="/">{config.seo.title}</a></h2>
 		<div class="internal-links">
 			{
-				config.nav.map((nav) => (
-					<HeaderLink href={nav.link}>{nav.title}</HeaderLink>
-				))
+				config.nav.map((nav) => {
+					const isExternal = nav.link.startsWith("http");
+					return (
+						<HeaderLink
+							href={nav.link}
+							target={isExternal ? "_blank" : undefined}
+							rel={isExternal ? "noopener noreferrer" : undefined}
+						>
+							{nav.title}
+						</HeaderLink>
+					);
+				})
 			}
 		</div>
 		<div class="right-controls">
@@ -87,7 +96,18 @@ import { ExternalLink, Menu, X } from "lucide-react";
 		</button>
 	</div>
 	<nav class="mobile-menu-links" aria-label="Primary navigation">
-		{config.nav.map((nav) => <HeaderLink href={nav.link}>{nav.title}</HeaderLink>)}
+		{config.nav.map((nav) => {
+			const isExternal = nav.link.startsWith("http");
+			return (
+				<HeaderLink
+					href={nav.link}
+					target={isExternal ? "_blank" : undefined}
+					rel={isExternal ? "noopener noreferrer" : undefined}
+				>
+					{nav.title}
+				</HeaderLink>
+			);
+		})}
 	</nav>
 	<a class="mobile-docs-link" href="https://docs.puda.co" target="_blank" rel="noopener noreferrer">
 		Docs
