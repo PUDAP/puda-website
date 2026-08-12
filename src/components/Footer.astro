@@ -20,12 +20,30 @@ const today = new Date();
 <style>
 
 	.copyright-footer {
-		padding: 2em 1em 2em 1em;
-		background-color: var(--footer-bg);
-		border-top: 1px solid var(--footer-border);
-		color: var(--footer-fg);
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		padding: 2.5em 1em;
+		background:
+			radial-gradient(circle at 50% 0%, rgba(44, 119, 155, 0.12), transparent 42%),
+			linear-gradient(180deg, #071116, #030708);
+		border-top: 1px solid rgba(91, 164, 194, 0.18);
+		color: rgba(181, 193, 196, 0.72);
 		text-align: center;
 		transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+	}
+
+	.copyright-footer::before {
+		content: "";
+		position: absolute;
+		z-index: -1;
+		inset: 0;
+		background-image:
+			linear-gradient(rgba(73, 137, 163, 0.04) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(73, 137, 163, 0.035) 1px, transparent 1px);
+		background-size: 120px 120px;
+		mask-image: linear-gradient(to bottom, #000, transparent);
+		-webkit-mask-image: linear-gradient(to bottom, #000, transparent);
 	}
 
 	.social-links {
@@ -37,12 +55,30 @@ const today = new Date();
 
 	.social-links a {
 		text-decoration: none;
-		color: var(--footer-link-fg);
-		transition: color 0.2s ease;
+		color: #75a9bb;
+		transition: color 0.2s ease, filter 0.2s ease, transform 0.2s ease;
 	}
 
 	.social-links a:hover {
-		color: var(--footer-link-hover);
+		color: #e8ff9c;
+		filter: drop-shadow(0 0 0.55rem rgba(232, 255, 156, 0.24));
+		transform: translateY(-0.12rem);
+	}
+
+	:global([data-theme="light"]) .copyright-footer {
+		background:
+			radial-gradient(circle at 50% 0%, rgba(35, 95, 118, 0.08), transparent 42%),
+			linear-gradient(180deg, #eef3f2, #f5f7f2);
+		border-top-color: rgba(35, 95, 118, 0.14);
+		color: rgba(13, 17, 13, 0.56);
+	}
+
+	:global([data-theme="light"]) .social-links a {
+		color: #39758a;
+	}
+
+	:global([data-theme="light"]) .social-links a:hover {
+		color: #4f7000;
 	}
 
 	.tina-footer {

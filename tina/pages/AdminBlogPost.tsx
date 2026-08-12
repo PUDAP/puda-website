@@ -30,12 +30,7 @@ export default function AdminBlogPost(props: Props) {
 			</div>
 			<div className="prose">
 				<div className="title">
-					<div style={{
-						background: "var(--blog-bg)",
-						border: "1px solid var(--blog-border)",
-						padding: "2rem 2rem",
-						marginBottom: "2rem",
-					}}>
+					<div className="blog-title-card">
 						<h1
 							data-tina-field={tinaField(blog, "title")}
 							style={{

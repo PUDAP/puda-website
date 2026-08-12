@@ -1,0 +1,119 @@
+<div class="hero-cli relative mt-8 w-full max-w-5xl overflow-hidden rounded-[2rem] border p-4 text-left shadow-2xl backdrop-blur md:mt-10 md:p-6">
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(232,255,156,0.20),transparent_30%),radial-gradient(circle_at_86%_70%,rgba(87,190,255,0.14),transparent_28%)]"></div>
+  <div class="cli-terminal relative rounded-[1.4rem] border shadow-xl">
+    <div class="cli-titlebar flex items-center gap-2 border-b px-4 py-3">
+      <span class="size-2.5 rounded-full bg-[#ff6b5f]"></span>
+      <span class="size-2.5 rounded-full bg-[#ffd36b]"></span>
+      <span class="size-2.5 rounded-full bg-[#65e28f]"></span>
+      <span class="cli-title ml-3 font-mono text-xs">puda — zsh</span>
+    </div>
+    <div id="cli-output" class="h-[19rem] space-y-2.5 overflow-hidden p-4 font-mono text-xs leading-4 sm:text-sm md:h-[22rem] md:p-6 md:text-[15px] md:leading-5 [&_p]:truncate">
+      <p id="cli-cursor" class="inline-flex items-center gap-2">
+        <span id="cli-prompt">$</span>
+        <span class="cli-cursor-block h-[1.1em] w-[0.5em] animate-pulse"></span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const LINES = [
+    { text: "$ puda protocol validate -f protocols/cv_scan.json", isCommand: true },
+    { text: "✓ validation passed: first + biologic commands resolved", isCommand: false },
+    { text: "$ puda protocol run -f protocols/cv_scan.json", isCommand: true },
+    { text: "run_id: f80fcfef-5cce-4e28-b66e-b345afa13a6c", isCommand: false },
+    { text: "first.start → idle | biologic.cv → data streamed", isCommand: false },
+    { text: '$ puda db exec "SELECT run_id, command_name, machine_id FROM command_log LIMIT 3"', isCommand: true },
+    { text: "✓ report artifact + audit trail ready", isCommand: false },
+  ];
+
+  const CHAR_DELAY   = 12;
+  const LINE_PAUSE   = 180;
+  const CLEAR_DELAY  = 3000;
+  const RESTART_DELAY = 1000;
+
+  function sleep(ms: number) {
+    return new Promise<void>(resolve => setTimeout(resolve, ms));
+  }
+
+  async function typeLine(el: HTMLElement, text: string) {
+    for (const char of text) {
+      el.textContent += char;
+      await sleep(CHAR_DELAY);
+    }
+  }
+
+  async function runLoop() {
+    const output  = document.getElementById("cli-output")!;
+    const cursor  = document.getElementById("cli-cursor")!;
+
+    while (true) {
+      for (const { text, isCommand } of LINES) {
+        const p = document.createElement("p");
+        p.className = isCommand ? "cli-line-command" : "cli-line-output";
+        output.insertBefore(p, cursor);
+        await typeLine(p, text);
+        await sleep(LINE_PAUSE);
+      }
+
+      await sleep(CLEAR_DELAY);
+
+      const lines = output.querySelectorAll("p:not(#cli-cursor)");
+      lines.forEach(l => l.remove());
+
+      await sleep(RESTART_DELAY);
+    }
+  }
+
+  runLoop();
+</script>
+
+<style>
+  .hero-cli {
+    background:
+      radial-gradient(circle at 15% 0%, rgba(53, 126, 158, 0.15), transparent 34%),
+      linear-gradient(145deg, rgba(10, 29, 38, 0.94), rgba(3, 12, 17, 0.97));
+    border-color: rgba(83, 173, 211, 0.3);
+    box-shadow:
+      0 2rem 5rem rgba(0, 0, 0, 0.5),
+      0 0 3rem rgba(40, 125, 160, 0.08),
+      inset 0 1px 0 rgba(151, 217, 240, 0.08);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .cli-terminal {
+    background-color: rgba(2, 8, 11, 0.97);
+    border-color: rgba(83, 173, 211, 0.2);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .cli-titlebar {
+    border-color: rgba(83, 173, 211, 0.17);
+    background: linear-gradient(90deg, rgba(11, 31, 40, 0.92), rgba(5, 19, 26, 0.92));
+  }
+
+  .cli-title {
+    color: rgba(177, 210, 220, 0.52);
+  }
+
+  #cli-output {
+    color: #d7e7eb;
+  }
+
+  #cli-cursor,
+  :global(.cli-line-command) {
+    color: #d7e7eb;
+  }
+
+  :global(.cli-line-output) {
+    color: #83b7c8;
+  }
+
+  #cli-prompt {
+    color: #e8ff9c;
+  }
+
+  .cli-cursor-block {
+    background-color: #e8ff9c;
+  }
+</style>

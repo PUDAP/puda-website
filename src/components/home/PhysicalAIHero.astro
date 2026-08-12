@@ -1,0 +1,39 @@
+<div class="home-hero-background absolute inset-0 overflow-hidden" aria-hidden="true">
+  <div class="home-hero-image absolute inset-0" />
+  <div class="home-hero-grid absolute inset-0" />
+  <div class="home-hero-overlay absolute inset-0" />
+</div>
+
+<style>
+  .home-hero-image {
+    background: #030708 url("/images/home-physical-ai-full-bg.png") center / cover no-repeat;
+  }
+
+  .home-hero-grid {
+    background-image:
+      linear-gradient(rgba(73, 137, 163, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(73, 137, 163, 0.04) 1px, transparent 1px);
+    background-size: 120px 120px;
+    opacity: 0.38;
+    mix-blend-mode: screen;
+  }
+
+  .home-hero-overlay {
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(3, 7, 8, 0.38) 0%, rgba(3, 7, 8, 0.52) 38%, rgba(3, 7, 8, 0.72) 76%, rgba(3, 7, 8, 0.9) 100%),
+      linear-gradient(0deg, #030708 0%, rgba(3, 7, 8, 0.84) 12%, transparent 36%),
+      linear-gradient(90deg, rgba(3, 7, 8, 0.25), rgba(3, 7, 8, 0.18), rgba(3, 7, 8, 0.25));
+  }
+
+  :global([data-theme="light"]) .home-hero-image {
+    opacity: 0.28;
+  }
+
+  :global([data-theme="light"]) .home-hero-grid {
+    display: none;
+  }
+
+  :global([data-theme="light"]) .home-hero-overlay {
+    background: linear-gradient(0deg, #f5f7f2 0%, rgba(245, 247, 242, 0.78) 45%, rgba(245, 247, 242, 0.48));
+  }
+</style>

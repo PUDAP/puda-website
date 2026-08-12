@@ -1,6 +1,7 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 import { Replay } from "../components/demo/replay";
 ---
 
@@ -13,7 +14,7 @@ import { Replay } from "../components/demo/replay";
     />
   </head>
 
-  <body class="demo-body min-h-screen">
+  <body class="demo-body min-h-screen flex flex-col">
     <Header />
     <section class="relative overflow-hidden px-6 py-6 md:px-12 lg:px-20">
 
@@ -56,6 +57,7 @@ import { Replay } from "../components/demo/replay";
       </div>
 
     </section>
+    <Footer />
   </body>
 </html>
 
