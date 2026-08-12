@@ -28,9 +28,9 @@
   ],
   "contactLinks": [
     {
-      "title": "X",
-      "link": "https://x.com/puda",
-      "icon": "TbBrandX"
+      "title": "arXiv",
+      "link": "https://arxiv.org/abs/2607.26464",
+      "icon": "TbArticle"
     },
     {
       "title": "Docs",
