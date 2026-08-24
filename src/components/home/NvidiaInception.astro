@@ -1,0 +1,204 @@
+---
+const inceptionUrl = "https://www.nvidia.com/en-us/startups/";
+---
+
+<section class="inception-section" aria-labelledby="inception-heading">
+  <div class="inception-inner">
+    <a
+      class="inception-badge"
+      href={inceptionUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="NVIDIA Inception Program member — visit NVIDIA Inception"
+    >
+      <svg
+        class="inception-lockup"
+        viewBox="0 0 420 168"
+        xmlns="http://www.w3.org/2000/svg"
+        role="img"
+      >
+        <title>NVIDIA Inception Program Member</title>
+        <rect width="420" height="168" rx="18" fill="#0a0a0a" />
+        <rect
+          x="1.25"
+          y="1.25"
+          width="417.5"
+          height="165.5"
+          rx="16.75"
+          fill="none"
+          stroke="#76B900"
+          stroke-opacity="0.35"
+          stroke-width="2.5"
+        />
+        <svg x="48" y="28" width="324" height="61" viewBox="316.2 33.8 630.2 118.2" aria-hidden="true">
+          <path
+            fill="#76B900"
+            d="M578.2 34v118h33.3V34h-33.3zm-262-.2v118.1h33.6V60.2l26.2.1c8.6 0 14.6 2.1 18.7 6.5 5.3 5.6 7.4 14.7 7.4 31.2v53.9h32.6V86.7c0-46.6-29.7-52.9-58.7-52.9h-59.8zm315.7.2v118h54c28.8 0 38.2-4.8 48.3-15.5 7.2-7.5 11.8-24.1 11.8-42.2 0-16.6-3.9-31.4-10.8-40.6C723 37.2 705.2 34 678.6 34h-46.7zm33 25.6h14.3c20.8 0 34.2 9.3 34.2 33.5s-13.4 33.6-34.2 33.6h-14.3V59.6zM530.2 34l-27.8 93.5L475.8 34h-36l38 118h48l38.4-118h-34zm231.4 118h33.3V34h-33.3v118zM855 34l-46.5 117.9h32.8l7.4-20.9h55l7 20.8h35.7L899.5 34H855zm21.6 21.5l20.2 55.2h-41l20.8-55.2z"
+          />
+        </svg>
+        <line
+          x1="52"
+          y1="100"
+          x2="368"
+          y2="100"
+          stroke="#76B900"
+          stroke-opacity="0.28"
+          stroke-width="1.25"
+        />
+        <text
+          x="210"
+          y="126"
+          fill="#ffffff"
+          font-family="Arial, Helvetica, sans-serif"
+          font-size="15"
+          font-weight="700"
+          letter-spacing="4.2"
+          text-anchor="middle"
+        >
+          INCEPTION PROGRAM
+        </text>
+        <text
+          x="210"
+          y="148"
+          fill="#76B900"
+          font-family="Arial, Helvetica, sans-serif"
+          font-size="12"
+          font-weight="700"
+          letter-spacing="6.5"
+          text-anchor="middle"
+        >
+          MEMBER
+        </text>
+      </svg>
+    </a>
+
+    <div class="inception-copy">
+      <p class="inception-label">NVIDIA Inception</p>
+      <h2 id="inception-heading">Member of the NVIDIA Inception program</h2>
+      <p class="inception-body">
+        PUDA is part of NVIDIA Inception, the program that helps AI startups
+        discover their opportunity, build faster, and grow on the NVIDIA
+        platform.
+      </p>
+      <a
+        class="inception-link"
+        href={inceptionUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Explore NVIDIA Inception
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M7 17 17 7"></path>
+          <path d="M7 7h10v10"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .inception-section {
+    background-color: var(--bg-secondary);
+    padding: 4.5rem 1.5rem;
+  }
+
+  .inception-inner {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 72rem;
+    grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+  }
+
+  .inception-badge {
+    display: block;
+    justify-self: center;
+    width: 100%;
+    max-width: 22rem;
+    transition: transform 0.2s ease, filter 0.2s ease;
+  }
+
+  .inception-badge:hover,
+  .inception-badge:focus-visible {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 12px 28px rgba(118, 185, 0, 0.22));
+  }
+
+  .inception-lockup {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .inception-label {
+    margin: 0 0 0.9rem;
+    color: #76b900;
+    font-size: 0.7rem;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+  }
+
+  .inception-copy h2 {
+    margin: 0 0 1rem;
+    color: var(--fg-primary);
+    font-size: clamp(2rem, 4vw, 3.15rem);
+    font-weight: 400;
+    letter-spacing: -0.065em;
+    line-height: 1.05;
+  }
+
+  .inception-body {
+    margin: 0 0 1.5rem;
+    max-width: 36rem;
+    color: var(--fg-secondary);
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .inception-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #76b900;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: opacity 0.15s ease, gap 0.15s ease;
+  }
+
+  .inception-link:hover,
+  .inception-link:focus-visible {
+    opacity: 0.8;
+    gap: 0.6rem;
+  }
+
+  @media (max-width: 800px) {
+    .inception-section {
+      padding: 3.25rem 1.25rem;
+    }
+
+    .inception-inner {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .inception-body {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+</style>

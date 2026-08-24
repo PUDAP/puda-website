@@ -1,0 +1,201 @@
+---
+const collaborators = [
+  {
+    name: "Nanyang Technological University",
+    href: "https://www.ntu.edu.sg",
+    src: "/partners/ntu.svg",
+    crest: true,
+  },
+  {
+    name: "National University of Singapore",
+    href: "https://www.nus.edu.sg",
+    src: "/partners/nus.svg",
+    crest: true,
+  },
+  {
+    name: "Massachusetts Institute of Technology",
+    href: "https://www.mit.edu",
+    src: "/partners/mit.svg",
+  },
+  {
+    name: "Seoul National University",
+    href: "https://en.snu.ac.kr",
+    src: "/partners/snu.svg",
+  },
+  {
+    name: "University of Toronto",
+    href: "https://www.utoronto.ca",
+    src: "/partners/utoronto.svg",
+    wide: true,
+  },
+  {
+    name: "A*STAR IMRE",
+    href: "https://www.a-star.edu.sg/imre",
+    src: "/partners/imre.png",
+    wide: true,
+  },
+  {
+    name: "Institute for Functional Intelligent Materials",
+    href: "https://ifim.nus.edu.sg",
+    src: "/partners/ifim.png",
+    wide: true,
+  },
+];
+
+const sequence = [...collaborators, ...collaborators];
+const groups = [sequence, sequence];
+---
+
+<section class="trust-bar" aria-label="Collaborating institutions">
+  <div class="trust-viewport">
+    <div class="trust-track">
+      {
+        groups.map((group, groupIndex) => (
+          <ul class="trust-group" aria-hidden={groupIndex > 0 ? "true" : undefined}>
+            {group.map((org) => (
+              <li>
+                <a
+                  class:list={["trust-logo", { wide: org.wide, crest: org.crest }]}
+                  href={org.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={org.name}
+                  aria-label={org.name}
+                  tabindex={groupIndex > 0 ? -1 : undefined}
+                >
+                  <img src={org.src} alt="" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .trust-bar {
+    background-color: var(--bg-primary);
+    border-top: 1px solid var(--header-border);
+    border-bottom: 1px solid var(--header-border);
+    padding: 2.25rem 0;
+  }
+
+  .trust-viewport {
+    overflow: hidden;
+    container-type: inline-size;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 8%,
+      #000 92%,
+      transparent
+    );
+  }
+
+  .trust-track {
+    display: flex;
+    width: max-content;
+    animation: trust-scroll 38s linear infinite;
+  }
+
+  .trust-group {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 4.5rem;
+    margin: 0;
+    padding: 0 2.25rem;
+    list-style: none;
+  }
+
+  .trust-group li {
+    flex: none;
+  }
+
+  .trust-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 5rem;
+  }
+
+  .trust-logo img {
+    display: block;
+    height: 3.75rem;
+    width: auto;
+    max-width: 13.5rem;
+    object-fit: contain;
+    filter: grayscale(1) invert(1);
+    opacity: 0.72;
+    transition: opacity 0.2s ease;
+  }
+
+  .trust-logo.crest img {
+    filter: grayscale(1);
+    opacity: 0.8;
+  }
+
+  .trust-logo.wide img {
+    height: 3.25rem;
+    max-width: 20rem;
+  }
+
+  .trust-logo:hover img,
+  .trust-logo:focus-visible img {
+    opacity: 0.95;
+  }
+
+  :global([data-theme="light"]) .trust-logo img,
+  :global([data-theme="light"]) .trust-logo.crest img {
+    filter: grayscale(1);
+    opacity: 0.55;
+  }
+
+  :global([data-theme="light"]) .trust-logo:hover img,
+  :global([data-theme="light"]) .trust-logo:focus-visible img {
+    opacity: 0.8;
+  }
+
+  @keyframes trust-scroll {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trust-viewport {
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+
+    .trust-track {
+      width: 100%;
+      animation: none;
+    }
+
+    .trust-group {
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+      min-width: 0;
+      gap: 3rem 4.5rem;
+      padding: 0 1.5rem;
+    }
+
+    .trust-group[aria-hidden="true"] {
+      display: none;
+    }
+  }
+</style>
