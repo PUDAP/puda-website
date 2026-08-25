@@ -23,9 +23,20 @@ const collaborators = [
     src: "/partners/snu.svg",
   },
   {
+    name: "Technical University of Denmark",
+    href: "https://www.dtu.dk",
+    src: "/partners/dtu.svg",
+  },
+  {
     name: "University of Toronto",
     href: "https://www.utoronto.ca",
     src: "/partners/utoronto.svg",
+    wide: true,
+  },
+  {
+    name: "Acceleration Consortium",
+    href: "https://acceleration.utoronto.ca/",
+    src: "/partners/acceleration-consortium.png",
     wide: true,
   },
   {
@@ -38,6 +49,18 @@ const collaborators = [
     name: "Institute for Functional Intelligent Materials",
     href: "https://ifim.nus.edu.sg",
     src: "/partners/ifim.png",
+    wide: true,
+  },
+  {
+    name: "Matwerkz",
+    href: "https://matwerkz.com/",
+    src: "/partners/matwerkz.png",
+    wide: true,
+  },
+  {
+    name: "LAPLACE",
+    href: "https://www.laplace-tech.com/",
+    src: "/partners/laplace.png",
     wide: true,
   },
 ];
@@ -104,7 +127,7 @@ const groups = [sequence, sequence];
   .trust-track {
     display: flex;
     width: max-content;
-    animation: trust-scroll 38s linear infinite;
+    animation: trust-scroll 58s linear infinite;
   }
 
   .trust-group {
@@ -165,6 +188,31 @@ const groups = [sequence, sequence];
     opacity: 0.8;
   }
 
+  @media (max-width: 800px) {
+    .trust-bar {
+      padding: 1.5rem 0;
+    }
+
+    .trust-group {
+      gap: 3rem;
+      padding: 0 1.5rem;
+    }
+
+    .trust-logo {
+      height: 3.75rem;
+    }
+
+    .trust-logo img {
+      height: 2.75rem;
+      max-width: 10rem;
+    }
+
+    .trust-logo.wide img {
+      height: 2.4rem;
+      max-width: 14.5rem;
+    }
+  }
+
   @keyframes trust-scroll {
     from {
       transform: translateX(-50%);
@@ -196,6 +244,12 @@ const groups = [sequence, sequence];
 
     .trust-group[aria-hidden="true"] {
       display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) and (max-width: 800px) {
+    .trust-group {
+      gap: 2rem 3rem;
     }
   }
 </style>
