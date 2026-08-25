@@ -1,3 +1,6 @@
+html {
+	overflow-x: clip;
+}
 body {
 	font-family: 'Atkinson', sans-serif;
 	margin: 0;
@@ -13,16 +16,19 @@ body {
 	line-height: 1.7;
 }
 main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
+	width: 100%;
+	max-width: 100%;
+	min-width: 0;
+	margin: 0;
+	padding: 0;
 }
 article {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 720px;
+	min-width: 0;
+	margin: 0 auto;
+	padding: 3em 1.25em;
 }
 h1,
 h2,
@@ -62,6 +68,7 @@ b {
 }
 a {
 	color: var(--blog-link);
+	overflow-wrap: anywhere;
 }
 a:hover {
 	color: var(--blog-link-hover);
@@ -94,10 +101,17 @@ input {
 	font-size: 16px;
 }
 table {
+	display: block;
 	width: 100%;
+	max-width: 100%;
 	margin: 1em 0 1.25em;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	border-collapse: collapse;
 }
-img {
+img,
+video,
+iframe {
 	max-width: 100%;
 	height: auto;
 	border-radius: 8px;
@@ -106,13 +120,39 @@ code {
 	padding: 2px 5px;
 	background-color: var(--blog-code-bg);
 	border-radius: 2px;
+	overflow-wrap: anywhere;
 }
 pre {
+	box-sizing: border-box;
+	max-width: 100%;
 	padding: 1.5em;
 	border-radius: 8px;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
 }
 pre > code {
 	all: unset;
+	overflow-wrap: normal;
+	word-break: normal;
+}
+.post-hero {
+	box-sizing: border-box;
+	background: var(--blog-bg);
+	border: 1px solid var(--blog-border);
+	padding: 2rem;
+	margin-bottom: 2rem;
+	overflow-wrap: anywhere;
+}
+.post-hero-meta {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	gap: 0.25rem 1.25rem;
+	font-size: 0.85rem;
+	min-width: 0;
+}
+.post-hero-meta > * {
+	min-width: 0;
+	overflow-wrap: anywhere;
 }
 blockquote {
 	border-left: 4px solid var(--accent);
@@ -130,7 +170,13 @@ hr {
 	body {
 		font-size: 15px;
 	}
-	main {
+	article {
+		padding: 1.5em 1.25em;
+	}
+	.post-hero {
+		padding: 1.25rem;
+	}
+	pre {
 		padding: 1em;
 	}
 }

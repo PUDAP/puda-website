@@ -30,16 +30,11 @@ export default function AdminBlogPost(props: Props) {
 			</div>
 			<div className="prose">
 				<div className="title">
-					<div style={{
-						background: "var(--blog-bg)",
-						border: "1px solid var(--blog-border)",
-						padding: "2rem 2rem",
-						marginBottom: "2rem",
-					}}>
+					<div className="post-hero">
 						<h1
 							data-tina-field={tinaField(blog, "title")}
 							style={{
-								fontSize: "clamp(2rem, 5vw, 3.5rem)",
+								fontSize: "clamp(1.75rem, 8vw, 3.5rem)",
 								fontWeight: 700,
 								lineHeight: 1.1,
 								margin: "0 0 2rem 0",
@@ -47,12 +42,7 @@ export default function AdminBlogPost(props: Props) {
 						>
 							{blog.title}
 						</h1>
-						<div style={{
-							display: "grid",
-							gridTemplateColumns: "max-content 1fr",
-							gap: "0.25rem 2rem",
-							fontSize: "0.85rem",
-						}}>
+						<div className="post-hero-meta">
 							<span style={{ color: "var(--fg-secondary)" }}>Published</span>
 							<span data-tina-field={tinaField(blog, "pubDate")} style={{ color: "var(--fg-primary)" }}>
 								{blog.pubDate && <FormattedDate date={blog.pubDate} />}
