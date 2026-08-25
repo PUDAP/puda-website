@@ -69,7 +69,20 @@ export default function AdminBlogPost(props: Props) {
 					</div>
 				</div>
 				<div data-tina-field={tinaField(blog, "body")}>
-					<TinaMarkdown content={blog.body} components={{ VideoEmbed: VideoEmbed as (props: object) => React.JSX.Element, Image: Image as (props: object) => React.JSX.Element }} />
+					<TinaMarkdown
+						content={blog.body}
+						components={{
+							VideoEmbed: VideoEmbed as (props: object) => React.JSX.Element,
+							Image: Image as (props: object) => React.JSX.Element,
+							// Preserve inline HTML (e.g. <span id="ref-1" />) so citation anchors work
+							html_inline: ({ value }: { value?: string }) => (
+								<span dangerouslySetInnerHTML={{ __html: value ?? "" }} />
+							),
+							html: ({ value }: { value?: string }) => (
+								<div dangerouslySetInnerHTML={{ __html: value ?? "" }} />
+							),
+						}}
+					/>
 				</div>
 			</div>
 		</article>
