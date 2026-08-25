@@ -1,0 +1,455 @@
+---
+const solutions = [
+  {
+    label: "Data trails",
+    title: "Capture every action, measurement, and decision",
+    body:
+      "Keep the agent conversation, reasoning, tool calls, machine commands, run state, raw outputs, and derived files aligned in one inspectable and replayable trail.",
+  },
+  {
+    label: "Closed loop",
+    title: "Turn context into the next action",
+    body:
+      "The AI agent uses this context to run an OODA loop: observe live data, orient with the trail, decide the next action, task, or control decision, and act — with a human in the loop.",
+  },
+  {
+    label: "post training",
+    title: "Post-train models on real physical runs",
+    body:
+      "Use verified machine actions, sensor measurements, and human-approved outcomes as training signal so post-training is grounded in production physical systems.",
+  },
+];
+
+const useCases = [
+  {
+    title: "Robotic workcells",
+    body:
+      "Coordinate arms, grippers, sensors, and inspection tools while preserving the full command and measurement history.",
+  },
+  {
+    title: "Autonomous test systems",
+    body:
+      "Run test stands, characterization equipment, and validation rigs with repeatable protocols and traceable outputs.",
+  },
+  {
+    title: "Industrial pilots",
+    body:
+      "Connect AI planning to machines on pilot lines where every action needs operator review, limits, and evidence.",
+  },
+  {
+    title: "Field operations",
+    body:
+      "Operate distributed physical assets through edge clients while keeping connectivity gaps, approvals, and data capture visible.",
+  },
+  {
+    title: "Closed-loop optimization",
+    body:
+      "Analyze run results and feed verified outcomes into the next action without losing provenance between iterations.",
+  },
+  {
+    title: "Human-in-the-loop control",
+    body:
+      "Let agents propose actions while people approve critical steps and audit what happened afterward.",
+  },
+];
+---
+
+<section id="solutions" class="solutions-section" aria-labelledby="solutions-heading">
+  <div class="solutions-grid-bg"></div>
+  <div class="solutions-radial-bg"></div>
+  <div class="solutions-vignette"></div>
+
+  <div class="solutions-hero">
+    <div class="solutions-hero-grid">
+      <h2 id="solutions-heading" class="solutions-heading">
+        Make your machines Physical AI ready
+      </h2>
+      <div class="solutions-intro">
+        <p>
+          PUDA gives teams the runtime layer that makes physical systems
+          AI-ready: execute typed machine actions, preserve the data
+          trail, prove where results came from, analyze outcomes, and close
+          the loop into the next physical action.
+        </p>
+        <div class="solutions-actions">
+          <a class="solutions-primary" href="/demo">
+            Explore demo
+          </a>
+          <a class="solutions-secondary" href="https://docs.puda.co" target="_blank" rel="noopener noreferrer">
+            Read docs
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="solutions-band">
+    <div class="solutions-section-head">
+      <p class="solutions-label">Use cases</p>
+      <h3>The Physical AI lifecycle in one system</h3>
+    </div>
+
+    <div class="solutions-cards">
+      {
+        solutions.map((solution) => (
+          <article class="solutions-card">
+            <p>{solution.label}</p>
+            <h4>{solution.title}</h4>
+            <span>{solution.body}</span>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="solutions-use-cases">
+    <div class="solutions-section-head">
+      <p class="solutions-label">Applications</p>
+      <h3>Use cases for Physical AI teams</h3>
+    </div>
+
+    <div class="solutions-use-case-grid">
+      {
+        useCases.map((useCase) => (
+          <article class="solutions-use-case">
+            <h4>{useCase.title}</h4>
+            <p>{useCase.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="solutions-contact">
+    <p class="solutions-label">Contact us</p>
+    <div class="solutions-contact-row">
+      <h3>Building Physical AI workflows?</h3>
+      <a class="solutions-contact-link" href="mailto:bearspuda@gmail.com">
+        bearspuda@gmail.com
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .solutions-section {
+    position: relative;
+    overflow: hidden;
+    padding: 5rem 1.5rem 6rem;
+    background-color: var(--bg-primary);
+    color: var(--fg-primary);
+    scroll-margin-top: 4.5rem;
+  }
+
+  .solutions-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(232, 255, 156, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232, 255, 156, 0.05) 1px, transparent 1px);
+    background-size: 120px 120px;
+    opacity: 0.42;
+    pointer-events: none;
+  }
+
+  .solutions-radial-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 15% 8%, rgba(232, 255, 156, 0.14), transparent 35%),
+      radial-gradient(circle at 86% 18%, rgba(87, 190, 255, 0.11), transparent 32%),
+      radial-gradient(circle at 50% 100%, rgba(212, 160, 75, 0.09), transparent 38%);
+    pointer-events: none;
+  }
+
+  .solutions-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.24) 48%, rgba(0, 0, 0, 0.76) 100%);
+    pointer-events: none;
+  }
+
+  [data-theme="light"] .solutions-grid-bg,
+  [data-theme="light"] .solutions-radial-bg,
+  [data-theme="light"] .solutions-vignette {
+    display: none;
+  }
+
+  .solutions-hero,
+  .solutions-band,
+  .solutions-use-cases,
+  .solutions-contact {
+    position: relative;
+    z-index: 10;
+    width: min(100%, 72rem);
+    margin: 0 auto;
+  }
+
+  .solutions-hero {
+    padding-bottom: 5rem;
+  }
+
+  .solutions-hero-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 1fr);
+    align-items: center;
+  }
+
+  .solutions-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.42em;
+    color: var(--accent);
+    margin: 0 0 1.25rem;
+  }
+
+  .solutions-heading {
+    font-size: clamp(3rem, 7.5vw, 6.5rem);
+    font-weight: 400;
+    line-height: 0.92;
+    letter-spacing: -0.065em;
+    color: var(--fg-primary);
+    margin: 0;
+    max-width: 54rem;
+  }
+
+  .solutions-intro {
+    color: var(--fg-secondary);
+    font-size: 1.08rem;
+    line-height: 1.8;
+  }
+
+  .solutions-intro p {
+    margin: 0;
+  }
+
+  .solutions-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  .solutions-primary,
+  .solutions-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.85rem 1.2rem;
+    font-size: 0.9rem;
+    line-height: 1;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .solutions-primary {
+    background: var(--accent);
+    color: var(--accent-fg);
+  }
+
+  .solutions-primary:hover {
+    background: #ffffff;
+  }
+
+  [data-theme="light"] .solutions-primary:hover {
+    background: #d0f060;
+  }
+
+  .solutions-secondary {
+    border: 1px solid var(--cta-border);
+    color: var(--cta-fg);
+  }
+
+  .solutions-secondary:hover {
+    background: var(--cta-hover-bg);
+  }
+
+  .solutions-band,
+  .solutions-use-cases,
+  .solutions-contact {
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+    padding: 3.5rem 0;
+  }
+
+  [data-theme="light"] .solutions-band,
+  [data-theme="light"] .solutions-use-cases,
+  [data-theme="light"] .solutions-contact {
+    border-top-color: rgba(0, 0, 0, 0.09);
+  }
+
+  .solutions-section-head {
+    max-width: 42rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .solutions-section-head h3 {
+    color: var(--fg-primary);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.055em;
+    margin: 0;
+  }
+
+  .solutions-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .solutions-card {
+    min-height: 17rem;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    padding: 1.4rem;
+    background: rgba(255, 255, 255, 0.03);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .solutions-card:hover {
+    border-color: rgba(232, 255, 156, 0.24);
+    background: rgba(232, 255, 156, 0.035);
+  }
+
+  [data-theme="light"] .solutions-card {
+    border-color: rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.02);
+  }
+
+  [data-theme="light"] .solutions-card:hover {
+    border-color: rgba(67, 114, 0, 0.24);
+    background: rgba(67, 114, 0, 0.04);
+  }
+
+  .solutions-card p {
+    color: var(--accent);
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin: 0 0 1.25rem;
+  }
+
+  .solutions-card h4 {
+    color: var(--fg-primary);
+    font-size: 1.35rem;
+    font-weight: 400;
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+    margin: 0 0 1rem;
+  }
+
+  .solutions-card span {
+    color: var(--fg-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-top: auto;
+  }
+
+  .solutions-use-case-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.09);
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  [data-theme="light"] .solutions-use-case-grid {
+    border-color: rgba(0, 0, 0, 0.09);
+    background: rgba(0, 0, 0, 0.09);
+  }
+
+  .solutions-use-case {
+    min-height: 11rem;
+    padding: 1.35rem;
+    background: rgba(8, 9, 8, 0.82);
+  }
+
+  [data-theme="light"] .solutions-use-case {
+    background: rgba(245, 247, 242, 0.96);
+  }
+
+  .solutions-use-case h4 {
+    color: var(--fg-primary);
+    font-size: 1.15rem;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.75rem;
+  }
+
+  .solutions-use-case p {
+    color: var(--fg-secondary);
+    font-size: 0.94rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .solutions-contact {
+    padding-bottom: 0;
+  }
+
+  .solutions-contact-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .solutions-contact h3 {
+    color: var(--fg-primary);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.055em;
+    margin: 0;
+  }
+
+  .solutions-contact-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--cta-border);
+    border-radius: 999px;
+    color: var(--cta-fg);
+    font-family: monospace;
+    font-size: 0.95rem;
+    line-height: 1;
+    padding: 0.9rem 1.2rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .solutions-contact-link:hover {
+    background: var(--cta-hover-bg);
+    border-color: var(--accent);
+    color: var(--fg-primary);
+  }
+
+  @media (max-width: 900px) {
+    .solutions-hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .solutions-cards,
+    .solutions-use-case-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .solutions-card,
+    .solutions-use-case {
+      min-height: auto;
+    }
+
+    .solutions-contact-row {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+</style>

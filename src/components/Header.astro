@@ -175,6 +175,7 @@ import { ExternalLink, Menu, X } from "lucide-react";
 
 	initToggle();
 	initMobileMenu();
+	scrollToHash();
 
 	// After each client-side navigation the <html> element is swapped in fresh
 	// (without data-theme), so we must re-apply the stored preference.
@@ -182,7 +183,16 @@ import { ExternalLink, Menu, X } from "lucide-react";
 		restoreTheme();
 		initToggle();
 		initMobileMenu();
+		scrollToHash();
 	});
+	document.addEventListener('astro:page-load', scrollToHash);
+
+	function scrollToHash() {
+		const id = window.location.hash.slice(1);
+		if (!id) return;
+		const el = document.getElementById(id);
+		el?.scrollIntoView();
+	}
 </script>
 
 <style>

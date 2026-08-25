@@ -10,16 +10,12 @@
       "link": "/"
     },
     {
-      "title": "Solutions",
-      "link": "/solutions"
-    },
-    {
       "title": "Blog",
       "link": "/blog"
     },
     {
       "title": "Demo",
-      "link": "https://demo.puda.co/d/bears/bears"
+      "link": "/demo"
     },
     {
       "title": "About",
