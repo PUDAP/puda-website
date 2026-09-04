@@ -58,8 +58,18 @@ const SECOND_DEMO_VIDEO_EMBED =
             </h2>
           </div>
         </div>
-        <p class="video-description mb-4 text-base md:text-lg">
+        <p class="video-description mb-2 text-base md:text-lg">
           Controlling lab devices using telegram
+        </p>
+        <p class="mb-4 text-sm md:text-base">
+          <a
+            class="video-link transition"
+            href="https://www.bilibili.com/video/BV1o2hg6zEvK/?share_source=copy_web&vd_source=4c0731b7e6c39bda92a5e1d7cef97270"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Watch the video on Bilibili: 【PUDA 操控实验仪器演示】
+          </a>
         </p>
         <VideoPlaceholder embedSrc={DEMO_VIDEO_EMBED} title="PUDA demo video" />
         <div class="mt-10 md:mt-14">
@@ -148,6 +158,18 @@ const SECOND_DEMO_VIDEO_EMBED =
     color: #aebcc0;
   }
 
+  .video-link {
+    color: #e8ff9c;
+    text-decoration: underline;
+    text-decoration-color: rgba(232, 255, 156, 0.45);
+    text-underline-offset: 0.25rem;
+  }
+
+  .video-link:hover {
+    color: #ffffff;
+    text-decoration-color: currentColor;
+  }
+
   .video-section > div:not(.home-circuit-bg) {
     position: relative;
     z-index: 2;
@@ -192,6 +214,15 @@ const SECOND_DEMO_VIDEO_EMBED =
   [data-theme="light"] .hero-subtitle,
   [data-theme="light"] .video-description {
     color: #545b52;
+  }
+
+  [data-theme="light"] .video-link {
+    color: #516a00;
+    text-decoration-color: rgba(81, 106, 0, 0.4);
+  }
+
+  [data-theme="light"] .video-link:hover {
+    color: #263300;
   }
 
   [data-theme="light"] .home-circuit-bg {
