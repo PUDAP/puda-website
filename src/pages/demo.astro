@@ -63,7 +63,7 @@ const LIVE_DASHBOARD_URL = "https://demo.puda.co/d/bears/bears";
           Controlling lab devices using telegram
         </p>
         <a
-          class="demo-video-link mb-4"
+          class="demo-video-link"
           href="https://www.bilibili.com/video/BV1o2hg6zEvK/?share_source=copy_web&vd_source=4c0731b7e6c39bda92a5e1d7cef97270"
           target="_blank"
           rel="noopener noreferrer"
@@ -130,9 +130,15 @@ const LIVE_DASHBOARD_URL = "https://demo.puda.co/d/bears/bears";
   }
 
   .demo-video-link {
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    width: fit-content;
+    margin-bottom: 1.5rem;
+    padding: 0.7rem 1rem;
     gap: 0.4rem;
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
     color: var(--accent);
     font-size: 0.95rem;
     font-weight: 500;
