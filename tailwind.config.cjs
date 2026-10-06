@@ -5,7 +5,16 @@ module.exports = {
     './tina/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'neutral-text': 'var(--fg-primary)',
+        'neutral-text-secondary': 'var(--fg-secondary)',
+        'neutral-border': 'var(--blog-border)',
+        'neutral-border-subtle': 'var(--blog-border)',
+        'neutral-background-secondary': 'var(--blog-code-bg)',
+        'background-brand-code': 'var(--blog-code-bg)',
+      },
+    },
   },
   plugins: [],
 };

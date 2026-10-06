@@ -74,6 +74,30 @@ export const BlogCollection: Collection = {
           ],
         },
         {
+          name: "fileStructure",
+          label: "Directory",
+          fields: [
+            {
+              type: "object",
+              name: "fileStructure",
+              label: "Files",
+              list: true,
+              fields: [
+                { type: "string", name: "id", label: "ID" },
+                { type: "string", name: "name", label: "Name" },
+                { type: "string", name: "type", label: "Type" },
+                { type: "string", name: "parentId", label: "Parent ID" },
+                { type: "string", name: "note", label: "Note" },
+              ],
+            },
+            {
+              type: "string",
+              name: "caption",
+              label: "Caption",
+            },
+          ],
+        },
+        {
           name: "Image",
           label: "Image",
           fields: [

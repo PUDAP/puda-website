@@ -5,6 +5,8 @@ import { TinaMarkdown } from 'tinacms/dist/rich-text'
 import FormattedDate from '../../src/components/react/FormattedDate.tsx';
 import VideoEmbed from '../../src/components/react/VideoEmbed.tsx';
 import Image from '../../src/components/react/Image.tsx';
+import { CodeBlock } from '../../src/components/react/code-block/code-block.tsx';
+import { FileStructure } from '../../src/components/react/file-structure.tsx';
 
 
 type Props = {
@@ -64,6 +66,8 @@ export default function AdminBlogPost(props: Props) {
 						components={{
 							VideoEmbed: VideoEmbed as (props: object) => React.JSX.Element,
 							Image: Image as (props: object) => React.JSX.Element,
+							code_block: CodeBlock as (props: object) => React.JSX.Element,
+							fileStructure: FileStructure as (props: object) => React.JSX.Element,
 							// Preserve inline HTML (e.g. <span id="ref-1" />) so citation anchors work
 							html_inline: ({ value }: { value?: string }) => (
 								<span dangerouslySetInnerHTML={{ __html: value ?? "" }} />

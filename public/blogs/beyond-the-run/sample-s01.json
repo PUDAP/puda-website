@@ -1,0 +1,50 @@
+{
+  "notice": "Anonymized stand-in for the public draft. Labels, targets, identifiers, and measurements are not the archived values.",
+  "sample": {
+    "label": "S01",
+    "sample_uuid": "4f8a1c2e-6b30-4d17-9a55-2e6c8b0d1f01",
+    "target": "target-A",
+    "destination": {
+      "deck_slot": "B1",
+      "well": "A1"
+    }
+  },
+  "experiment": {
+    "protocol_id": "2b6f9d80-1a47-4c33-8e15-6d0a4f7c2e90",
+    "run_id": "9d3e7a14-5c28-4f60-b193-7a2d6e4c8b10"
+  },
+  "stages": {
+    "01_protocol_definition": {
+      "target": "target-A",
+      "components": ["metal-precursor", "linker-A"]
+    },
+    "02_automated_formulation": {
+      "run_id": "9d3e7a14-5c28-4f60-b193-7a2d6e4c8b10",
+      "destination": { "deck_slot": "B1", "well": "A1" }
+    },
+    "03_homogenization": {
+      "started_at": "2026-08-27T08:25:33Z",
+      "completed_at": "2026-08-27T08:26:40Z",
+      "event_id": "e7b0c4a1-3f92-4d58-9c16-5a8e2d0b6f33",
+      "run_id": "6a1c4e90-8d25-4b71-a3f6-0c5e9d2b7a14",
+      "programmed_duration_seconds": 60
+    },
+    "04_mass_measurement": {
+      "gross_mass_g": 8.14,
+      "tare_mass_g": 5.412,
+      "derived_net_mass_g": 2.728,
+      "gross_evidence_class": "operator_provided_measured",
+      "net_evidence_class": "derived_from_operator_measured_gross_and_calibration_mean"
+    },
+    "05_post_microwave_visual_observation": {
+      "sample_uuid": "4f8a1c2e-6b30-4d17-9a55-2e6c8b0d1f01",
+      "label": "S01",
+      "evidence_class": "image_based_visual_assessment",
+      "source_image": "images/post-microwave-row.jpg",
+      "source_sha256": "9f2c6b81e4d047a3b5c18e70d2a64f93c0b8175e4d6a2918f3c54b07e81d6a02",
+      "crop_image": "images/s01-crop.jpg",
+      "crop_sha256": "4c81e0d7a2b695f3418c6e09d5a7b218f60c34e91ab2d478053e6c91f7a0b4d5",
+      "microwave_synthesis_timestamp": null
+    }
+  }
+}

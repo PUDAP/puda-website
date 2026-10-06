@@ -1,0 +1,245 @@
+---
+title: "Beyond the run: Making AI-driven experiments traceable"
+slug: beyond-the-run
+email: hongzhao@puda.co
+description: "Sample UUIDs, file hashes, measurement lineage, and practical agent instructions from a MOF synthesis workflow with PUDA at A*STAR IMRE, Singapore."
+pubDate: 2026-10-06T00:00:00.000Z
+---
+
+Getting an agent to run an experiment is exciting. Coming back later to a folder of files you can actually understand is less exciting, but probably just as useful.
+
+A file called `results_final.csv` raises a few questions. Which sample? Which run? What changed since the last export? If the answers live in someone's head or halfway up a chat thread, the next researcher has to reconstruct them. An AI agent picking up the work faces the same problem.
+
+`results_final.csv` — a deliberately stripped-down view
+
+<table class="center-table">
+<thead><tr><th>Mass (g)</th></tr></thead>
+<tbody>
+<tr><td>8.140</td></tr>
+<tr><td>8.206</td></tr>
+<tr><td>8.153</td></tr>
+</tbody>
+</table>
+
+The numbers look usable. Which samples do they describe, and do they include the vial? The original record supplies sample UUIDs, run and protocol IDs, the instrument, timestamps, and separate gross, tare, and net masses. Removing that context leaves the values intact while making them much harder to interpret.
+
+Names, IDs, and numbers in this post are stand-ins. The archive keeps the originals. The table is one column of the archived mass file, with the heading shortened to “Mass (g)”.
+
+## Jayce's MOF synthesis
+
+<Image src="/blogs/beyond-the-run/jayce-mof-setup-imre.jpg" alt="Overhead view of Jayce's enclosed MOF laboratory setup, with a Dobot robotic arm, a liquid handler, a BioShake with a heating pad, racks of capped vials, two centrifuges, and a capper/decapper arranged on the work surface." caption="Jayce's MOF synthesis setup at A*STAR IMRE, Singapore. A Dobot robotic arm, a liquid handler, a BioShake with a heating pad, two centrifuges, and a capper/decapper share the enclosed workspace. Photo supplied by the research team." />
+
+At A*STAR IMRE in Singapore, Jayce is working on synthesizing metal-organic frameworks, or MOFs. These materials form when metal ions or metal-containing clusters connect through organic linker molecules. Changing the metal, the linker, or the groups attached to the linker changes the structure, so a synthesis campaign has many possible combinations.
+
+Preparing a formulation is only the beginning. Researchers also need to establish what material formed and compare it with the intended target. Similar-looking vials can contain samples prepared with different ingredients or histories, and visible precipitate alone does not establish that the desired MOF was synthesized.
+
+This example follows one 24-sample batch from August 27. The samples are called S01–S24. Each targets a member of the same materials family, made from a metal precursor and a different organic-linker formulation. Some formulations use one linker; others mix linkers. S01 is recorded as `target-A` with `linker-A`. S02 is recorded as `target-B` with `linker-B`. S06 mixes the parent linker with `linker-A`. These names describe intended formulations. They are not confirmation that the product has that composition or structure, and they are not the labels used in the lab.
+
+The enclosed bench holds a Dobot robotic arm, a liquid handler, a BioShake with a heating pad, two centrifuges, and a capper/decapper. The workflow includes preparing and placing reagent stocks, dispensing formulations into sample vials, homogenizing the mixtures, and collecting measurements and observations. The archive preserves automated reagent-transfer records, a BioShake homogenization record, operator-supplied mass measurements, and photographs the operator described as taken after microwave synthesis. It also contains earlier batches and practice runs. A familiar sample label is not enough to establish that two records describe the same physical material.
+
+A later measurement has to stay connected to the formulation and preparation history of the sample being measured. Otherwise a comparison can assign a result to the wrong combination of reagents.
+
+## PUDA logs the machine activity; you provide the sample context
+
+Currently, PUDA logs and stores machine-related data. It knows about the experiments and workflows being executed. It does not know which physical sample a particular experiment or measurement is being performed on.
+
+You have to provide that context. Tell the agent which sample is in which vial or well, which stock was loaded, and which sample an uploaded measurement or photograph belongs to. Tell it to preserve those associations as the workflow progresses. A machine reporting an operation at well A1 does not establish the identity of the sample in A1. A simulation of the deck does not either. It only represents the conditions encoded in the model, so it cannot establish that a physical vial still contains the expected sample, or that someone has moved a plate since the model was updated.
+
+The sample-level traceability in this guide comes from combining PUDA's machine records with the context you supply and the linked records the agent maintains. PUDA does not infer it from execution logs. If the sample context is missing or ambiguous, the agent should ask you to resolve it rather than guess.
+
+Every useful instruction in this workflow does three things:
+
+1. Name the operation.
+2. Name the sample — by UUID once it exists, rather than by a well, or by a label reused across batches.
+3. Say what the record must keep: the stock, the measurement, the image, the timestamps, and the link to the existing sample.
+
+The chats below are examples of that pattern. The folder layout is where the agent puts the result.
+
+## Set up the project before running the experiment
+
+Before asking the agent to run anything, give the experiment a dedicated project folder and initialize the PUDA project inside it. PUDA stores each run in a [log file and a local SQLite database](https://docs.puda.co/docs/overview/under-the-hood#persistence): the log keeps the full execution trace, and the database keeps command and run metadata for local lookup. Protocols go in `protocols/`. After a run, PUDA writes that run's log into `logs/`, named by its run ID. It does not create `measurements/`, `images/`, `samples/`, or `reports/`. Instruct the agent to create and maintain those folders.
+
+A useful working layout is:
+
+<fileStructure
+  caption="One experiment's folder"
+  fileStructure={[
+    { id: "root", name: "experiment-project/", type: "folder", parentId: null },
+    { id: "project", name: "project.md", type: "file", parentId: "root", note: "created by puda init; summary of everything that happened" },
+    { id: "config", name: "puda.config", type: "file", parentId: "root", note: "created by puda init; project configuration" },
+    { id: "db", name: "puda.db", type: "file", parentId: "root", note: "created by puda init; SQLite command and run metadata" },
+    { id: "logs", name: "logs/", type: "folder", parentId: "root", note: "written automatically after each run" },
+    { id: "protocols", name: "protocols/", type: "folder", parentId: "root", note: "one JSON file per protocol" },
+    { id: "measurements", name: "measurements/", type: "folder", parentId: "root", note: "measurement files given to the agent in the prompt" },
+    { id: "images", name: "images/", type: "folder", parentId: "root", note: "photographs given to the agent in the prompt" },
+    { id: "samples", name: "samples/", type: "folder", parentId: "root", note: "one linked record per sample" },
+    { id: "reports", name: "reports/", type: "folder", parentId: "root", note: "derived summaries, calculations, and plots" }
+  ]}
+/>
+
+Give the sample context in the prompt: chemical identities, stock concentrations, preparation notes, measurement files, and photographs. That is how the agent learns what those files mean. Ask it to file measurement tables in `measurements/`, photographs in `images/`, and the chemical notes in `project.md` or on the sample record, preserving your wording. A file placed in a folder without passing through the agent never becomes context the agent has.
+
+Use `samples/` for the linked sample records and `reports/` for generated summaries, calculations, plots, and other derived outputs. Reports should point back to their inputs and the relevant sample and run IDs. Save corrected inputs as new versions with an explanation, so the earlier evidence stays in the record.
+
+**Suggested setup instruction for the agent:**
+
+```text
+Before running any experiment commands, create a dedicated project folder called <experiment-name> and initialize the PUDA project there. Create measurements, images, samples, and reports folders. I will give you sample context in future prompts: chemical identities, stock notes, measurement files, and photographs. File measurement tables in measurements and photographs in images, with their source and timestamps. Keep derived outputs in reports and link them back to the measurement files, images, sample IDs, and run IDs. Keep project.md as a summary of everything that happened in this project. If you are unsure of where to save certain files or data, ask me.
+```
+
+### Record when it happened, not just when it was saved
+
+A chemical preparation, a transfer, a measurement, an upload, and a report export are different events. Give each one its own time: when the work happened (`prepared_at`, `measured_at`, `started_at`, `completed_at`), when the agent received it (`received_at`, `recorded_at`), and when a report was produced (`exported_at`, `generated_at`). Store timestamps in ISO 8601 with a UTC `Z` or an explicit offset, and keep the original timestamp and its source when you normalize it. For records that span multiple machines, the [machine clocks need to be synchronized](https://docs.puda.co/docs/setup/clock-sync).
+
+If you upload yesterday's measurement today, the upload time has to stay distinct from the measurement time. If the acquisition time is unknown, record it as unknown and ask for clarification when it matters. Recorded event times are what a later session should trust. Copying or exporting a file can change its modification time.
+
+Folder structure makes the evidence easy to find. Timestamps place it in sequence. Sample and run IDs establish which records belong together. Nearby timestamps alone are not enough to infer that association.
+
+## Start with the stock record and the sample identity
+
+The transfer request included a CSV, the operator's stock locations, the destination plate, available tips, and pipetting settings. It also told the agent what to preserve.
+
+<figure class="chat-thread" aria-label="Two excerpts from the same transfer request"><figcaption>Two excerpts from the same transfer request</figcaption><div class="chat-canvas"><div class="chat-bubble" data-role="user"><div class="chat-speaker">Researcher</div><div class="chat-file"><span class="chat-file-icon" aria-hidden="true">↓</span><span class="chat-file-body"><span class="chat-file-name">20260826-stock-table.csv</span><span class="chat-file-size">559 B</span></span><span class="chat-file-time">03:09 PM</span></div><p class="chat-text">The reagent stock solution IDs are in the stock table attached to this message. Match and log the stock ID and concentrations.</p></div><div class="chat-bubble" data-role="user"><div class="chat-speaker">Researcher</div><p class="chat-text">Generate UUIDs for each sample</p></div></div></figure>
+
+“Match and log” asks for more than a volume moved between wells. The resulting record needs to say which stock supplied it, at what recorded concentration, and which sample received it.
+
+The consolidated S01 record contains these identifiers and its formulation destination:
+
+```json
+{
+  "sample": {
+    "label": "S01",
+    "sample_uuid": "4f8a1c2e-6b30-4d17-9a55-2e6c8b0d1f01",
+    "target": "target-A",
+    "destination": { "deck_slot": "B1", "well": "A1" }
+  },
+  "experiment": {
+    "protocol_id": "2b6f9d80-1a47-4c33-8e15-6d0a4f7c2e90",
+    "run_id": "9d3e7a14-5c28-4f60-b193-7a2d6e4c8b10"
+  }
+}
+```
+
+The label is what a person can write on a vial. The UUID distinguishes this sample from other batches that reuse similar labels. The well describes where the sample sat during formulation. Later stages should keep the UUID. `target` records the intended material. Confirmation of composition or structure is a later measurement, not this field.
+
+S01's record links its metal-precursor addition to the stock ID, the recorded concentration, and the source location. Those chemical details stay in the private archive. The dispense is also linked to a protocol step and a command-log record: a successful `dispense_to` to `B1/A1`. That entry is the controller's report. Delivered volume and reagent identity still depend on the stock record and, later, on a measurement.
+
+## Keep practice runs out of the experimental evidence
+
+An earlier request used the same broad batch naming but included a different instruction:
+
+<figure class="chat-thread" aria-label="An earlier request, not the August 27 production batch"><figcaption>An earlier request, not the August 27 production batch</figcaption><div class="chat-canvas"><div class="chat-bubble" data-role="user"><div class="chat-speaker">Researcher</div><p class="chat-text">Generate UUIDs for samples. Label this run as practice.</p></div></div></figure>
+
+A validated plan, a physical practice run, and an experimental batch should remain distinguishable in the records. Otherwise an agent doing analysis later may treat a plan or a rehearsal as an observation. Status and run identity belong in the data, not only in the surrounding conversation.
+
+## Attach each new stage to the existing samples
+
+After formulation, the researcher asked for a homogenization step and specified where its history should go.
+
+<figure class="chat-thread" aria-label="An operation plus a requirement to preserve its context"><figcaption>An operation plus a requirement to preserve its context</figcaption><div class="chat-canvas"><div class="chat-bubble" data-role="user"><div class="chat-speaker">Researcher</div><p class="chat-text">Shake the samples in the Bioshake at 600 rpm for 60s and log this homogenization step to the samples UUIDs</p></div></div></figure>
+
+The homogenization report adds a new event and a new BioShake run, and keeps the original sample UUID. For S01 the new identifiers are:
+
+- Homogenization run: `6a1c4e90-8d25-4b71-a3f6-0c5e9d2b7a14`
+- Homogenization event: `e7b0c4a1-3f92-4d58-9c16-5a8e2d0b6f33`
+
+The record separates the programmed 60-second shake from the overall stage timestamps, `2026-08-27T08:25:33Z` to `2026-08-27T08:26:40Z`. Those are different kinds of timing, and each should stay attached to what it actually describes.
+
+The same principle applies to later washing, transfers, or characterization: keep the existing identity for the same tracked sample, and record a new event. If material is split into separately tracked samples, create child identities and preserve their parent relationship.
+
+## Preserve the measurement and the calculation separately
+
+This was before the Mettler-Toledo balance was integrated, so the instrument could not attach the reading to a sample on its own. Jayce supplied that context: a CSV of the measured gross masses, and the name of the balance. With those, the agent could link each mass to the sample that already had a UUID.
+
+<figure class="chat-thread" aria-label="Mass measurement request and the agent's qualification"><figcaption>Mass measurement request and the agent's qualification</figcaption><div class="chat-canvas"><div class="chat-bubble" data-role="user"><div class="chat-speaker">Researcher</div><div class="chat-file"><span class="chat-file-icon" aria-hidden="true">↓</span><span class="chat-file-body"><span class="chat-file-name">20260826-dispensed-mass.csv</span><span class="chat-file-size">1.6 KB</span></span><span class="chat-file-time">04:37 PM</span></div><p class="chat-text">These are the measured post dispense masses for S01–S24 in the 4 mL vials. Subtract the average vial mass and log the actual dispensed masses. Measured on Mettler-Toledo XPR 205</p></div><div class="chat-bubble" data-role="assistant"><div class="chat-speaker">Agent</div><p class="chat-text">The measured gross and derived net records were bound to all 24 existing sample UUIDs. Since no individual vial-number-to-sample mapping was supplied, these values use the <strong>group-average vial tare</strong>, rather than an individually measured tare for each sample.</p></div></div></figure>
+
+For S01 the record keeps the gross mass, the instrument `Mettler-Toledo XPR 205`, a tare calibration ID, and a separate derived net mass:
+
+```text
+Gross mass supplied by the operator:  8.140 g
+Mean empty-vial tare:                 5.412 g
+Derived net dispensed mass:           2.728 g
+```
+
+The gross value is labeled `operator_provided_measured`. The net value is labeled `derived_from_operator_measured_gross_and_calibration_mean`. The tare is the mean of an empty-vial calibration set, because no vial-by-vial mapping was supplied. That assumption has to travel with the result. A later analysis can reopen the input measurement and question the tare, while the gross mass remains the number the operator reported. The net mass is stored at the full precision of the subtraction. That precision is the arithmetic. The measurement uncertainty still has to be stated on its own.
+
+## Make images part of the sample history
+
+<figure class="chat-thread" aria-label="Image logging request and the agent's stated limits"><figcaption>Image logging request and the agent's stated limits</figcaption><div class="chat-canvas"><div class="chat-bubble" data-role="user"><div class="chat-speaker">Researcher</div><img class="chat-photo" src="/blogs/beyond-the-run/vial-row-anonymized.jpg" alt="A row of capped vials whose contents vary in color, cloudiness, and settled solids. The handwritten sample names on the glass are covered." /><p class="chat-text">I just uploaded 2 pictures of S01–S24 after microwave synthesis. The sample IDs are written on the vials. Log the vial images to each sample and describe the appearance - clear, cloudy, any color, etc</p></div><div class="chat-bubble" data-role="assistant"><div class="chat-speaker">Agent</div><p class="chat-text">I preserved the two original images, generated 24 per-vial crops and a contact sheet, and updated the existing provenance records without changing the sample UUIDs. These are conservative still-image descriptions under uncontrolled lighting—not confirmation of composition, yield, phase identity, or synthesis success.</p></div></div></figure>
+
+The photograph in that message is the one described as taken after microwave synthesis. The handwritten sample names are covered. Color, cloudiness, and settled solids are unchanged. The microwave step itself has no process record in this archive, so these photos cannot reconstruct the synthesis conditions.
+
+The S01 visual observation stores the sample UUID, an appearance description, a confidence label, a recording timestamp, and a hash of each file:
+
+```text
+source image: images/post-microwave-row.jpg
+sha256:       9f2c6b81e4d047a3b5c18e70d2a64f93c0b8175e4d6a2918f3c54b07e81d6a02
+vial crop:    images/s01-crop.jpg
+sha256:       4c81e0d7a2b695f3418c6e09d5a7b218f60c34e91ab2d478053e6c91f7a0b4d5
+```
+
+A hash is a fingerprint of a file's exact bytes. Ask the agent to compute it again. If it matches, the file you have is the one that was logged, rather than a later edit or a different shot. The same check is what makes the ZIP at the end of this post trustworthy. Every file in it was saved with its hash.
+
+This workflow already used vision to describe photographs. The physical labels were still handwritten, and the sample association relied on those labels and the operator's statement of which vial was which. Describing a labeled photo is a different task from identifying an unknown sample.
+
+## Leave a sample record that another session can inspect
+
+The later instruction to organize the experiment was simple:
+
+<figure class="chat-thread" aria-label="A request to turn scattered history into per-sample records"><figcaption>A request to turn scattered history into per-sample records</figcaption><div class="chat-canvas"><div class="chat-bubble" data-role="user"><div class="chat-speaker">Researcher</div><p class="chat-text">create a json file for each sample. e.g s01.json under the experiment workspace<br /><br />put all the related experiment data inside, including sample uuid each stage of the experiment should be a new subkey in the json object, with timestamps for each</p></div></div></figure>
+
+The archived per-sample file has five stage keys. <a href="/blogs/beyond-the-run/sample-s01.json" download="sample-s01.json">Download the anonymized S01 record (JSON)</a> to inspect the full file.
+
+```text
+01_protocol_definition
+02_automated_formulation
+03_homogenization
+04_mass_measurement
+05_post_microwave_visual_observation
+```
+
+The mass stage keeps the inputs, the derived value, and the assumption under separate labels:
+
+```json
+"04_mass_measurement": {
+  "gross_mass_g": 8.14,
+  "tare_mass_g": 5.412,
+  "derived_net_mass_g": 2.728,
+  "gross_evidence_class": "operator_provided_measured",
+  "net_evidence_class": "derived_from_operator_measured_gross_and_calibration_mean"
+}
+```
+
+Each stage carries the timestamps and evidence links that belong to it. The image stage stores the hashes quoted above, and `microwave_synthesis_timestamp` is null. The file was generated on September 11, 2026, while the formulation and observation records refer to August 27–28. Keeping both dates prevents the export time from being mistaken for the experiment time.
+
+The per-sample file gives the next session a place to start. It still needs to point back to the protocol, command logs, source measurements, and images. A tidy JSON document can contain stale fields too.
+
+JSON fit this batch because stages, measurements, and observations were still being added. A relational database may fit better once the tables are stable. Either way, the record has to keep sample identity, preparation history, measurement meaning and units, timestamps, source evidence, assumptions, and the links between them.
+
+## What you can answer about S01
+
+`results_final.csv` leaves these questions open. The sample record answers them:
+
+- Which sample is 8.140 g, and does that include the vial?
+- Which stock went into S01, and was this the practice run?
+- When was it shaken, as distinct from when the JSON was exported on September 11, 2026?
+- Is this photograph the file that was logged?
+
+The limits stay visible too. Stock identity was operator-provided. The tare is a group average. Some original CSVs are already missing from the chat cache, though their paths and recorded hashes remain. There is no microwave process record.
+
+Before calling a workflow finished, check that:
+
+- Sample labels, UUIDs, and run identities agree, including across repeated batches.
+- Every measurement or observation points to the sample it describes.
+- Derived values retain their inputs, units, calculation, and assumptions.
+- Referenced files exist, match their hashes, and have a durable backup.
+- Practice runs, failures, missing evidence, and unresolved associations stay visible.
+- Another session can inspect the records without relying on the previous agent's conversation memory.
+
+## How this post was written
+
+I wrote this post with an AI agent. I did not collect the archive by hand. The samples, runs, measurements, images, and conversations were already linked. One prompt was enough:
+
+<figure class="chat-thread" aria-label="The experiment name in the prompt and on the ZIP is anonymized."><figcaption>The experiment name in the prompt and on the ZIP is anonymized.</figcaption><div class="chat-canvas"><div class="chat-bubble" data-role="user"><div class="chat-speaker">Researcher</div><p class="chat-text">give me a zip file of all the data, conversations and resources related to this experiment</p></div><div class="chat-bubble" data-role="assistant"><div class="chat-speaker">Agent</div><div class="chat-file"><span class="chat-file-icon" aria-hidden="true">↓</span><span class="chat-file-body"><span class="chat-file-name">experiment-archive-...1T050523Z.zip</span><span class="chat-file-size">30.2 MB</span></span><span class="chat-file-time">01:08 PM</span></div><p class="chat-text">Archive ready<br /><br />The ZIP contains:<br /><br />- 194 data and resource files for the experiment<br />- Topic-scoped conversations from 17 sessions — 5,743 messages<br />- 10 protocols, 14 runs, and 1,314 command-log records<br />- The batch's sample JSON files, manifests, provenance reports, scripts, logs, captures, and post-microwave images<br />- Filtered PUDA SQLite and JSONL exports<br />- A README, a provenance manifest, and a SHA-256 checksum for each file<br /><br />Validation passed:<br /><br />- ZIP integrity<br />- 237 archived-file checksums<br />- JSON and JSONL parsing<br />- SQLite integrity check<br />- Scans for identity and credential material<br />- No live lab database included<br /><br />Some historical uploaded CSVs were already missing from the chat cache. Their original paths and recorded hashes remain in the provenance records.</p></div></div></figure>
+
+That answer was possible because the provenance was already in the files. The agent followed the links. It did not have to reconstruct the experiment from the conversation.
