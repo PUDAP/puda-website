@@ -1,7 +1,7 @@
 ---
 title: "Beyond the run: Making AI-driven experiments traceable"
 slug: beyond-the-run
-email: hongzhao@puda.co
+email: hongzhao@puda.co, jayce_cheng@a-star.edu.sg
 description: "Sample UUIDs, file hashes, measurement lineage, and practical agent instructions from a MOF synthesis workflow with PUDA at A*STAR IMRE, Singapore."
 pubDate: 2026-10-06T00:00:00.000Z
 ---
@@ -182,7 +182,7 @@ A hash is a fingerprint of a file's exact bytes. Ask the agent to compute it aga
 
 This workflow already used vision to describe photographs. The physical labels were still handwritten, and the sample association relied on those labels and the operator's statement of which vial was which. Describing a labeled photo is a different task from identifying an unknown sample.
 
-## Leave a sample record that another session can inspect
+## Keep the sample history in one record
 
 The later instruction to organize the experiment was simple:
 
@@ -216,30 +216,10 @@ The per-sample file gives the next session a place to start. It still needs to p
 
 JSON fit this batch because stages, measurements, and observations were still being added. A relational database may fit better once the tables are stable. Either way, the record has to keep sample identity, preparation history, measurement meaning and units, timestamps, source evidence, assumptions, and the links between them.
 
-## What you can answer about S01
-
-`results_final.csv` leaves these questions open. The sample record answers them:
-
-- Which sample is 8.140 g, and does that include the vial?
-- Which stock went into S01, and was this the practice run?
-- When was it shaken, as distinct from when the JSON was exported on September 11, 2026?
-- Is this photograph the file that was logged?
-
-The limits stay visible too. Stock identity was operator-provided. The tare is a group average. Some original CSVs are already missing from the chat cache, though their paths and recorded hashes remain. There is no microwave process record.
-
-Before calling a workflow finished, check that:
-
-- Sample labels, UUIDs, and run identities agree, including across repeated batches.
-- Every measurement or observation points to the sample it describes.
-- Derived values retain their inputs, units, calculation, and assumptions.
-- Referenced files exist, match their hashes, and have a durable backup.
-- Practice runs, failures, missing evidence, and unresolved associations stay visible.
-- Another session can inspect the records without relying on the previous agent's conversation memory.
-
 ## How this post was written
 
-I wrote this post with an AI agent. I did not collect the archive by hand. The samples, runs, measurements, images, and conversations were already linked. One prompt was enough:
+This post was written with the help of an AI agent. The archive was not collected by hand. The AI agent can link the samples to the runs, measurements, images, and conversations. Just one prompt was enough:
 
-<figure class="chat-thread" aria-label="The experiment name in the prompt and on the ZIP is anonymized."><figcaption>The experiment name in the prompt and on the ZIP is anonymized.</figcaption><div class="chat-canvas"><div class="chat-bubble" data-role="user"><div class="chat-speaker">Researcher</div><p class="chat-text">give me a zip file of all the data, conversations and resources related to this experiment</p></div><div class="chat-bubble" data-role="assistant"><div class="chat-speaker">Agent</div><div class="chat-file"><span class="chat-file-icon" aria-hidden="true">↓</span><span class="chat-file-body"><span class="chat-file-name">experiment-archive-...1T050523Z.zip</span><span class="chat-file-size">30.2 MB</span></span><span class="chat-file-time">01:08 PM</span></div><p class="chat-text">Archive ready<br /><br />The ZIP contains:<br /><br />- 194 data and resource files for the experiment<br />- Topic-scoped conversations from 17 sessions — 5,743 messages<br />- 10 protocols, 14 runs, and 1,314 command-log records<br />- The batch's sample JSON files, manifests, provenance reports, scripts, logs, captures, and post-microwave images<br />- Filtered PUDA SQLite and JSONL exports<br />- A README, a provenance manifest, and a SHA-256 checksum for each file<br /><br />Validation passed:<br /><br />- ZIP integrity<br />- 237 archived-file checksums<br />- JSON and JSONL parsing<br />- SQLite integrity check<br />- Scans for identity and credential material<br />- No live lab database included<br /><br />Some historical uploaded CSVs were already missing from the chat cache. Their original paths and recorded hashes remain in the provenance records.</p></div></div></figure>
+<figure class="chat-thread" aria-label="The experiment name in the prompt and on the ZIP is anonymized."><figcaption>The experiment name in the prompt and on the ZIP is anonymized.</figcaption><div class="chat-canvas"><div class="chat-bubble" data-role="user"><div class="chat-speaker">Researcher</div><p class="chat-text">give me a zip file of all the data, conversations and resources related to this experiment</p></div><div class="chat-bubble" data-role="assistant"><div class="chat-speaker">Agent</div><div class="chat-file"><span class="chat-file-icon" aria-hidden="true">↓</span><span class="chat-file-body"><span class="chat-file-name">experiment-archive-...1T050523Z.zip</span><span class="chat-file-size">30.2 MB</span></span><span class="chat-file-time">01:08 PM</span></div><p class="chat-text">Archive ready<br /><br />The ZIP contains:<br /><br />- 194 data and resource files for the experiment<br />- Topic-scoped conversations from 17 sessions — 5,743 messages<br />- 10 protocols, 14 runs, and 1,314 command-log records<br />- The batch's sample JSON files, manifests, provenance reports, scripts, logs, captures, and post-microwave images<br />- Filtered PUDA SQLite and JSONL exports<br />- A README, a provenance manifest, and a SHA-256 checksum for each file<br /><br />Validation passed:<br /><br />- ZIP integrity<br />- 237 archived-file checksums<br />- JSON and JSONL parsing<br />- SQLite integrity check<br />- Scans for identity and credential material<br />- No live lab database included</p></div></div></figure>
 
-That answer was possible because the provenance was already in the files. The agent followed the links. It did not have to reconstruct the experiment from the conversation.
+This was possible because the provenance was already embedded in the data and files, making it easy for the agent to trace where the information came from.
