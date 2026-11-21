@@ -101,9 +101,9 @@ const FileTreeItem = ({
         <div className="flex-shrink-0 mt-0.5">
           {node.type === "folder" ? (
             isExpanded && hasChildren ? (
-              <FolderOpen className="h-4 w-4 text-blue-500" />
+              <FolderOpen className="h-4 w-4 text-[color:var(--accent)]" />
             ) : (
-              <Folder className="h-4 w-4 text-blue-500" />
+              <Folder className="h-4 w-4 text-[color:var(--accent)]" />
             )
           ) : (
             <File className="h-4 w-4 text-neutral-text-secondary" />
@@ -156,7 +156,7 @@ export const FileStructure = ({
 
   return (
     <div className="my-8">
-      <div className="bg-background-brand-code border border-neutral-border rounded-xl overflow-hidden shadow-md">
+      <div className="bg-background-brand-code border border-neutral-border rounded-xl overflow-hidden">
         <div className="p-4 font-mono text-sm overflow-x-auto">
           {treeNodes.map((node) => (
             <FileTreeItem

@@ -4,9 +4,26 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import VideoPlaceholder from "../components/VideoPlaceholder.astro";
 
-const DEMO_VIDEO_EMBED = "https://youtu.be/0cpDzuESnMQ";
-const SECOND_DEMO_VIDEO_EMBED = "https://www.youtube.com/embed/rOKpWaq1ALw";
 const LIVE_DASHBOARD_URL = "https://demo.puda.co/d/bears/bears";
+
+const videos = [
+  {
+    embed: "https://youtu.be/0cpDzuESnMQ",
+    title: "PUDA demo video",
+    caption: "Controlling lab devices using Telegram",
+    bilibili:
+      "https://www.bilibili.com/video/BV1o2hg6zEvK/?share_source=copy_web&vd_source=4c0731b7e6c39bda92a5e1d7cef97270",
+    bilibiliTitle: "PUDA 操控实验仪器演示",
+  },
+  {
+    embed: "https://www.youtube.com/embed/rOKpWaq1ALw",
+    title: "PUDA demo video 2",
+    caption: "Controlling lab devices using Cursor",
+    bilibili:
+      "https://www.bilibili.com/video/BV1RShg6qErJ/?share_source=copy_web&vd_source=4c0731b7e6c39bda92a5e1d7cef97270",
+    bilibiliTitle: "在编程界面用PUDA操控实验仪器",
+  },
+];
 ---
 
 <!doctype html>
@@ -18,157 +35,122 @@ const LIVE_DASHBOARD_URL = "https://demo.puda.co/d/bears/bears";
     />
   </head>
 
-  <body class="demo-body min-h-screen">
+  <body>
     <Header />
 
-    <section id="live" class="live-section px-6 py-16 md:px-12 lg:px-20">
-      <div class="mx-auto w-full max-w-[92rem]">
-        <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <main>
+      <section class="section page-top" aria-labelledby="demo-heading">
+        <div class="container">
+          <p class="t-label">Demo</p>
+          <h1 id="demo-heading" class="t-h1">See PUDA in motion.</h1>
+
+          <div class="video-grid">
+            {
+              videos.map((video) => (
+                <figure class="video-item">
+                  <VideoPlaceholder embedSrc={video.embed} title={video.title} />
+                  <figcaption>
+                    <span class="t-title">{video.caption}</span>
+                    <a
+                      class="link-arrow"
+                      href={video.bilibili}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={video.bilibiliTitle}
+                    >
+                      Watch on Bilibili
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M7 17 17 7"></path>
+                        <path d="M7 7h10v10"></path>
+                      </svg>
+                    </a>
+                  </figcaption>
+                </figure>
+              ))
+            }
+          </div>
+        </div>
+      </section>
+
+      <section id="live" class="section live" aria-labelledby="live-heading">
+        <div class="container live-row">
           <div>
-            <p class="demo-label mb-4 text-xs uppercase tracking-[0.42em]">Live data</p>
-            <h1 class="video-heading text-5xl font-normal tracking-[-0.065em] md:text-7xl">
-              See the lab in real time.
-            </h1>
-            <p class="video-description mt-4 max-w-3xl text-base md:text-lg">
-              Live production data from NUS, NTU and A*STAR IFIM in Singapore
+            <p class="t-label">Live data</p>
+            <h2 id="live-heading" class="t-h2">See the lab in real time.</h2>
+            <p class="t-lead">
+              Live production data from NUS, NTU and A*STAR IFIM in Singapore.
             </p>
           </div>
           <a
-            class="live-open-link"
+            class="btn btn-primary"
             href={LIVE_DASHBOARD_URL}
             target="_blank"
             rel="noopener noreferrer"
           >
             Open dashboard
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M7 17 17 7"></path>
               <path d="M7 7h10v10"></path>
             </svg>
           </a>
         </div>
-      </div>
-    </section>
-
-    <section class="video-section px-6 py-16 md:px-12 lg:px-20">
-      <div class="mx-auto w-full max-w-[92rem]">
-        <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between lg:mb-10">
-          <div>
-            <p class="demo-label mb-4 text-xs uppercase tracking-[0.42em]">Demo</p>
-            <h2 class="video-heading text-5xl font-normal tracking-[-0.065em] md:text-7xl">
-              See PUDA in motion.
-            </h2>
-          </div>
-        </div>
-        <p class="video-description mb-4 text-base md:text-lg">
-          Controlling lab devices using telegram
-        </p>
-        <a
-          class="demo-video-link"
-          href="https://www.bilibili.com/video/BV1o2hg6zEvK/?share_source=copy_web&vd_source=4c0731b7e6c39bda92a5e1d7cef97270"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Watch on Bilibili: PUDA 操控实验仪器演示
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M7 17 17 7"></path>
-            <path d="M7 7h10v10"></path>
-          </svg>
-        </a>
-        <VideoPlaceholder embedSrc={DEMO_VIDEO_EMBED} title="PUDA demo video" />
-        <div class="mt-10 md:mt-14">
-          <p class="video-description mb-4 text-base md:text-lg">
-            Controlling lab devices using cursor
-          </p>
-          <a
-            class="demo-video-link"
-            href="https://www.bilibili.com/video/BV1RShg6qErJ/?share_source=copy_web&vd_source=4c0731b7e6c39bda92a5e1d7cef97270"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Watch on Bilibili: 在编程界面用PUDA操控实验仪器
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M7 17 17 7"></path>
-              <path d="M7 7h10v10"></path>
-            </svg>
-          </a>
-          <VideoPlaceholder embedSrc={SECOND_DEMO_VIDEO_EMBED} title="PUDA demo video 2" />
-        </div>
-      </div>
-    </section>
+      </section>
+    </main>
 
     <Footer />
   </body>
 </html>
 
 <style>
-  .demo-body {
-    background-color: var(--bg-primary);
-    color: var(--fg-primary);
-    transition: background-color 0.25s ease, color 0.2s ease;
+  .video-grid {
+    display: grid;
+    gap: 3rem 2rem;
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
   }
 
-  .demo-label {
-    color: var(--accent);
+  .video-item {
+    margin: 0;
   }
 
-  .video-section {
-    background-color: var(--bg-secondary);
-    transition: background-color 0.25s ease;
-  }
-
-  .video-heading {
-    color: var(--fg-primary);
-  }
-
-  .video-description {
-    color: var(--fg-secondary);
-  }
-
-  .live-section {
-    background-color: var(--bg-secondary);
-    scroll-margin-top: 5rem;
-  }
-
-  .live-open-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: var(--accent);
-    font-size: 0.95rem;
-    font-weight: 500;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: opacity 0.15s ease, gap 0.15s ease;
-  }
-
-  .demo-video-link {
+  .video-item figcaption {
     display: flex;
-    align-items: center;
-    width: fit-content;
-    margin-bottom: 1.5rem;
-    padding: 0.7rem 1rem;
-    gap: 0.4rem;
-    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--accent) 10%, transparent);
-    color: var(--accent);
-    font-size: 0.95rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: opacity 0.15s ease, gap 0.15s ease;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1.25rem;
   }
 
-  .live-open-link:hover,
-  .live-open-link:focus-visible,
-  .demo-video-link:hover,
-  .demo-video-link:focus-visible {
-    opacity: 0.8;
-    gap: 0.6rem;
+  .live {
+    scroll-margin-top: var(--header-h);
   }
 
-  @media (max-width: 720px) {
-    .live-open-link {
-      align-self: flex-start;
+  .live-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .live .t-label {
+    margin-bottom: 1.25rem;
+  }
+
+  .live .t-lead {
+    margin-top: 1.25rem;
+    max-width: 32rem;
+  }
+
+  @media (min-width: 60rem) {
+    .video-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .live-row {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
     }
   }
 </style>

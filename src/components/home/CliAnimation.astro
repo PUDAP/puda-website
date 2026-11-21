@@ -1,113 +1,793 @@
-<div class="hero-cli relative mt-8 w-full max-w-5xl overflow-hidden rounded-[2rem] border p-4 text-left shadow-2xl backdrop-blur md:mt-10 md:p-6">
-  <div class="absolute inset-0 bg-[radial-gradient(circle_at_18%_22%,rgba(232,255,156,0.20),transparent_30%),radial-gradient(circle_at_86%_70%,rgba(87,190,255,0.14),transparent_28%)]"></div>
-  <div class="cli-terminal relative rounded-[1.4rem] border shadow-xl">
-    <div class="cli-titlebar flex items-center gap-2 border-b px-4 py-3">
-      <span class="size-2.5 rounded-full bg-[#ff6b5f]"></span>
-      <span class="size-2.5 rounded-full bg-[#ffd36b]"></span>
-      <span class="size-2.5 rounded-full bg-[#65e28f]"></span>
-      <span class="cli-title ml-3 font-mono text-xs">puda — zsh</span>
+---
+// The hero terminal: one PUDA agent session laid out as a reinforcement-learning
+// trajectory. Every episode fills in the same three records — state, action,
+// reward — using real CLI commands, then resets the environment and runs again.
+const phases = [
+  { id: "state", name: "State", sub: "environment" },
+  { id: "action", name: "Action", sub: "tool calls" },
+  { id: "reward", name: "Reward", sub: "sensor results" },
+];
+---
+
+<div class="rl-frame">
+  <div
+    class="rl-term"
+    data-rl-terminal
+    role="img"
+    aria-label="Animated terminal. An AI agent reads machine state with puda machine commands, runs a protocol with puda protocol run, and receives cyclic voltammetry and X-ray diffraction results as its reward, then resets the machine and repeats."
+  >
+    <div class="rl-chrome" aria-hidden="true">
+      <span class="rl-dots"><i></i><i></i><i></i></span>
+      <span class="rl-title">puda — closed loop</span>
+      <span class="rl-episode">episode <b data-rl-episode>01</b></span>
     </div>
-    <div id="cli-output" class="h-[19rem] space-y-2.5 overflow-hidden p-4 font-mono text-xs leading-4 sm:text-sm md:h-[22rem] md:p-6 md:text-[15px] md:leading-5 [&_p]:truncate">
-      <p id="cli-cursor" class="inline-flex items-center gap-2">
-        <span id="cli-prompt">$</span>
-        <span class="cli-cursor-block h-[1.1em] w-[0.5em] animate-pulse"></span>
-      </p>
+
+    <div class="rl-body" aria-hidden="true">
+      {
+        phases.map((phase) => (
+          <section class="rl-phase" data-phase={phase.id}>
+            <header class="rl-tag">
+              <span class="rl-tag-name">{phase.name}</span>
+              <span class="rl-tag-sub">{phase.sub}</span>
+            </header>
+            <div class="rl-lines" data-lines={phase.id} />
+          </section>
+        ))
+      }
+    </div>
+
+    <div class="rl-status" aria-hidden="true">
+      <span class="rl-rec"><i></i>recording trajectory</span>
+      <span class="rl-tuple">(state, action, reward)</span>
+      <span class="rl-history-label">reward</span>
+      <span class="rl-history" data-rl-history></span>
     </div>
   </div>
 </div>
 
 <script>
-  const LINES = [
-    { text: "$ puda protocol validate -f protocols/cv_scan.json", isCommand: true },
-    { text: "✓ validation passed: first + biologic commands resolved", isCommand: false },
-    { text: "$ puda protocol run -f protocols/cv_scan.json", isCommand: true },
-    { text: "run_id: f80fcfef-5cce-4e28-b66e-b345afa13a6c", isCommand: false },
-    { text: "first.start → idle | biologic.cv → data streamed", isCommand: false },
-    { text: '$ puda db exec "SELECT run_id, command_name, machine_id FROM command_log LIMIT 3"', isCommand: true },
-    { text: "✓ report artifact + audit trail ready", isCommand: false },
+  type PhaseId = "state" | "action" | "reward";
+
+  interface Episode {
+    protocol: string;
+    discover: boolean;
+    cv: { amp: number; readings: [string, string] };
+    xrd: { purity: number; readings: [string, string] };
+    reward: number;
+  }
+
+  // Each episode the agent revises the protocol and the measured outcome improves.
+  const EPISODES: Episode[] = [
+    {
+      protocol: "cv_01",
+      discover: true,
+      cv: { amp: 0.58, readings: ["j  3.1 mA cm⁻²", "η  412 mV"] },
+      xrd: { purity: 0.71, readings: ["phase purity 0.71", "2θ 38.2° (111)"] },
+      reward: 0.42,
+    },
+    {
+      protocol: "cv_02",
+      discover: false,
+      cv: { amp: 0.74, readings: ["j  5.4 mA cm⁻²", "η  366 mV"] },
+      xrd: { purity: 0.83, readings: ["phase purity 0.83", "2θ 38.2° (111)"] },
+      reward: 0.61,
+    },
+    {
+      protocol: "cv_03",
+      discover: false,
+      cv: { amp: 0.88, readings: ["j  7.2 mA cm⁻²", "η  331 mV"] },
+      xrd: { purity: 0.9, readings: ["phase purity 0.90", "2θ 38.2° (111)"] },
+      reward: 0.74,
+    },
+    {
+      protocol: "cv_04",
+      discover: false,
+      cv: { amp: 1, readings: ["j  8.6 mA cm⁻²", "η  312 mV"] },
+      xrd: { purity: 0.94, readings: ["phase purity 0.94", "2θ 38.2° (111)"] },
+      reward: 0.86,
+    },
   ];
 
-  const CHAR_DELAY   = 12;
-  const LINE_PAUSE   = 180;
-  const CLEAR_DELAY  = 3000;
-  const RESTART_DELAY = 1000;
+  const TYPE_MS = 20;
+  const SVG_NS = "http://www.w3.org/2000/svg";
 
-  function sleep(ms: number) {
-    return new Promise<void>(resolve => setTimeout(resolve, ms));
+  // A new token is issued on every (re)start so that a loop left running by a
+  // previous page view stops as soon as it wakes up.
+  let session = 0;
+  let inView = true;
+  let viewObserver: IntersectionObserver | null = null;
+
+  const reducedMotion = () =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  class Cancelled extends Error {}
+
+  function timer(ms: number) {
+    return new Promise<void>((resolve) => setTimeout(resolve, ms));
   }
 
-  async function typeLine(el: HTMLElement, text: string) {
-    for (const char of text) {
-      el.textContent += char;
-      await sleep(CHAR_DELAY);
+  /** Waits `ms`, then holds while the terminal is off-screen or the tab is hidden. */
+  async function wait(ms: number, token: number) {
+    await timer(ms);
+    while (token === session && (!inView || document.hidden)) await timer(240);
+    if (token !== session) throw new Cancelled();
+  }
+
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, className: string, text?: string) {
+    const node = document.createElement(tag);
+    node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  /** Cyclic voltammogram — the classic "duck". `amp` scales the peak current. */
+  function cvPath(amp: number) {
+    const y = (v: number) => (19 - v * amp).toFixed(1);
+    return (
+      `M6 ${y(-4)} C30 ${y(-3.5)} 44 ${y(-2)} 52 ${y(4)} ` +
+      `C57 ${y(8)} 60 ${y(15)} 68 ${y(15)} C78 ${y(15)} 86 ${y(9)} 114 ${y(8)} ` +
+      `C96 ${y(6)} 82 ${y(4)} 72 ${y(-2)} C66 ${y(-6)} 62 ${y(-15)} 54 ${y(-15)} ` +
+      `C44 ${y(-15)} 34 ${y(-7)} 6 ${y(-4)}`
+    );
+  }
+
+  /** Powder diffractogram — target-phase peaks grow and the impurity peak fades as purity rises. */
+  function xrdPath(purity: number) {
+    const peaks = [
+      { x: 34, h: 29 * purity, w: 1.6 },
+      { x: 49, h: 14 * purity, w: 1.6 },
+      { x: 66, h: 58 * (1 - purity), w: 1.9 },
+      { x: 83, h: 11 * purity, w: 1.7 },
+      { x: 103, h: 8 * purity, w: 1.7 },
+    ];
+    let d = "";
+    for (let x = 6; x <= 114; x += 0.75) {
+      let y = 33 - 0.45 * Math.sin(x * 1.7) - 0.3 * Math.sin(x * 0.61);
+      for (const p of peaks) y -= p.h * Math.exp(-(((x - p.x) / p.w) ** 2));
+      d += `${x === 6 ? "M" : "L"}${x} ${Math.max(2.5, y).toFixed(1)} `;
     }
+    return d.trim();
   }
 
-  async function runLoop() {
-    const output  = document.getElementById("cli-output")!;
-    const cursor  = document.getElementById("cli-cursor")!;
+  function plot(d: string, axisY: number) {
+    const svg = document.createElementNS(SVG_NS, "svg");
+    svg.setAttribute("viewBox", "0 0 120 38");
+    svg.setAttribute("class", "rl-plot");
+    svg.setAttribute("aria-hidden", "true");
+    const axis = document.createElementNS(SVG_NS, "path");
+    axis.setAttribute("d", `M6 ${axisY}H114`);
+    axis.setAttribute("class", "rl-plot-axis");
+    const trace = document.createElementNS(SVG_NS, "path");
+    trace.setAttribute("d", d);
+    trace.setAttribute("pathLength", "1");
+    trace.setAttribute("class", "rl-plot-trace");
+    svg.append(axis, trace);
+    return svg;
+  }
 
-    while (true) {
-      for (const { text, isCommand } of LINES) {
-        const p = document.createElement("p");
-        p.className = isCommand ? "cli-line-command" : "cli-line-output";
-        output.insertBefore(p, cursor);
-        await typeLine(p, text);
-        await sleep(LINE_PAUSE);
+  function start(root: HTMLElement) {
+    const token = ++session;
+    const lines = {
+      state: root.querySelector<HTMLElement>('[data-lines="state"]')!,
+      action: root.querySelector<HTMLElement>('[data-lines="action"]')!,
+      reward: root.querySelector<HTMLElement>('[data-lines="reward"]')!,
+    };
+    const episodeLabel = root.querySelector<HTMLElement>("[data-rl-episode]")!;
+    const history = root.querySelector<HTMLElement>("[data-rl-history]")!;
+    const instant = reducedMotion();
+
+    const pause = (ms: number) => (instant ? Promise.resolve() : wait(ms, token));
+
+    function setPhase(id: PhaseId | null) {
+      root.querySelectorAll<HTMLElement>(".rl-phase").forEach((phase) => {
+        phase.toggleAttribute("data-active", phase.dataset.phase === id);
+      });
+    }
+
+    function push(phase: PhaseId, node: HTMLElement) {
+      const box = lines[phase];
+      box.append(node);
+      box.scrollTop = box.scrollHeight;
+      return node;
+    }
+
+    async function command(phase: PhaseId, text: string) {
+      const row = el("p", "rl-line rl-cmd");
+      const prompt = el("span", "rl-prompt", "$");
+      const body = el("span", "rl-text");
+      const caret = el("span", "rl-caret");
+      row.append(prompt, body, caret);
+      push(phase, row);
+      if (instant) {
+        body.textContent = text;
+      } else {
+        await pause(220);
+        for (const char of text) {
+          body.textContent += char;
+          await pause(TYPE_MS);
+        }
+        await pause(260);
+      }
+      caret.remove();
+    }
+
+    async function output(phase: PhaseId, text: string, tone = "", delay = 170) {
+      push(phase, el("p", `rl-line rl-out ${tone}`.trim(), text));
+      await pause(delay);
+    }
+
+    async function measurement(label: string, figure: SVGElement, readings: [string, string]) {
+      const row = el("div", "rl-measure");
+      const name = el("span", "rl-measure-name", label);
+      const values = el("span", "rl-measure-values");
+      values.append(el("span", "", readings[0]), el("span", "", readings[1]));
+      row.append(name, figure, values);
+      push("reward", row);
+      if (instant) {
+        row.classList.add("is-drawn", "is-read");
+        return;
+      }
+      await pause(60);
+      row.classList.add("is-drawn");
+      await pause(820);
+      row.classList.add("is-read");
+      await pause(260);
+    }
+
+    async function rewardLine(value: number, previous: number | null) {
+      const row = el("p", "rl-line rl-reward");
+      const name = el("span", "rl-reward-name", "reward");
+      const amount = el("span", "rl-reward-value", "+0.00");
+      const meter = el("span", "rl-reward-meter");
+      const fill = el("i", "");
+      meter.append(fill);
+      row.append(name, amount, meter);
+      if (previous !== null) {
+        row.append(el("span", "rl-reward-delta", `▲ ${(value - previous).toFixed(2)}`));
+      }
+      push("reward", row);
+      if (instant) {
+        amount.textContent = `+${value.toFixed(2)}`;
+        fill.style.transform = `scaleX(${value})`;
+        row.classList.add("is-settled");
+        return;
+      }
+      await pause(60);
+      fill.style.transform = `scaleX(${value})`;
+      const from = previous ?? 0;
+      const frames = 14;
+      for (let i = 1; i <= frames; i += 1) {
+        amount.textContent = `+${(from + ((value - from) * i) / frames).toFixed(2)}`;
+        await pause(32);
+      }
+      row.classList.add("is-settled");
+    }
+
+    function recordHistory(value: number) {
+      const bar = el("i", "");
+      bar.style.height = `${Math.round(22 + value * 78)}%`;
+      history.append(bar);
+      requestAnimationFrame(() => bar.classList.add("is-in"));
+    }
+
+    async function clear() {
+      if (!instant) {
+        root.classList.add("is-resetting");
+        await pause(320);
+      }
+      Object.values(lines).forEach((box) => box.replaceChildren());
+      root.classList.remove("is-resetting");
+    }
+
+    async function runEpisode(episode: Episode, index: number) {
+      episodeLabel.textContent = String(index + 1).padStart(2, "0");
+
+      // State — tool discovery and tool status.
+      setPhase("state");
+      if (episode.discover) {
+        await command("state", "puda machine list");
+        await output("state", "3 machines found: biologic  first  xrd", "", 320);
+        await command("state", "puda machine state biologic");
+        await output("state", "idle", "rl-ok", 320);
+        await command("state", "puda machine commands biologic");
+        await output("state", "OCV  CA  CV  PEIS  GEIS  MPP", "", 420);
+      } else {
+        await command("state", "puda machine state first");
+        await output("state", "idle", "rl-ok", 260);
+        await command("state", "puda machine state biologic");
+        await output("state", "idle", "rl-ok", 260);
+        await command("state", "puda machine state xrd");
+        await output("state", "idle", "rl-ok", 420);
       }
 
-      await sleep(CLEAR_DELAY);
+      // Action — a validated protocol dispatched to the machines.
+      setPhase("action");
+      await command("action", `puda protocol run -f protocols/${episode.protocol}.json`);
+      await output("action", "Command 1/3 succeeded: dispense_to (step 1)", "", 420);
+      await output("action", "Command 2/3 succeeded: CV (step 2)", "", 520);
+      await output("action", "Command 3/3 succeeded: scan (step 3)", "", 420);
+      await output("action", "All 3 commands completed successfully", "rl-ok", 480);
 
-      const lines = output.querySelectorAll("p:not(#cli-cursor)");
-      lines.forEach(l => l.remove());
-
-      await sleep(RESTART_DELAY);
+      // Reward — sensor results streamed back from the instruments.
+      setPhase("reward");
+      await command("reward", "puda machine watch biologic xrd");
+      await measurement("cv", plot(cvPath(episode.cv.amp), 19), episode.cv.readings);
+      await measurement("xrd", plot(xrdPath(episode.xrd.purity), 34.5), episode.xrd.readings);
+      await rewardLine(episode.reward, index > 0 ? EPISODES[index - 1].reward : null);
+      recordHistory(episode.reward);
+      await pause(1500);
     }
+
+    /** Resets the environment for the next episode. */
+    async function resetEnvironment() {
+      setPhase("action");
+      await command("action", "puda machine reset first");
+      await output("action", "first → idle", "rl-ok", 1100);
+    }
+
+    async function loop() {
+      if (instant) {
+        // No motion: show the finished final episode as a still.
+        EPISODES.slice(0, -1).forEach((episode) => recordHistory(episode.reward));
+        await runEpisode(EPISODES[EPISODES.length - 1], EPISODES.length - 1);
+        setPhase(null);
+        return;
+      }
+      for (;;) {
+        history.replaceChildren();
+        for (let i = 0; i < EPISODES.length; i += 1) {
+          await runEpisode(EPISODES[i], i);
+          await resetEnvironment();
+          await clear();
+        }
+      }
+    }
+
+    loop().catch((error) => {
+      if (!(error instanceof Cancelled)) throw error;
+    });
   }
 
-  runLoop();
+  function init() {
+    const root = document.querySelector<HTMLElement>("[data-rl-terminal]");
+    // Each terminal element is started once; a client-side navigation swaps in a new one.
+    if (!root || root.dataset.rlReady) return;
+    root.dataset.rlReady = "true";
+    viewObserver?.disconnect();
+    inView = true;
+    viewObserver = new IntersectionObserver(
+      (entries) => {
+        inView = entries.some((entry) => entry.isIntersecting);
+      },
+      { threshold: 0.05 },
+    );
+    viewObserver.observe(root);
+    start(root);
+  }
+
+  // `astro:page-load` fires on the first load and after every client-side navigation;
+  // the direct call covers the case where this module is evaluated after that event.
+  document.addEventListener("astro:page-load", init);
+  document.addEventListener("astro:before-swap", () => {
+    session += 1;
+  });
+  init();
 </script>
 
-<style>
-  .hero-cli {
-    background-color: var(--cli-wrapper-bg);
-    border-color: var(--cli-wrapper-border);
-    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+<style is:global>
+  .rl-frame {
+    container-type: inline-size;
+  }
+
+  .rl-term {
+    --rl-line: 1.7em;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--cli-wrapper-border);
+    border-radius: 1rem;
+    background: var(--cli-terminal-bg);
+    box-shadow:
+      0 40px 90px -30px rgba(0, 0, 0, 0.75),
+      0 0 0 1px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    color: var(--cli-text);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-size: clamp(0.6875rem, 2.36cqi, 0.875rem);
+    line-height: var(--rl-line);
+    text-align: left;
     transition: background-color 0.25s ease, border-color 0.25s ease;
   }
 
-  .cli-terminal {
-    background-color: var(--cli-terminal-bg);
-    border-color: var(--cli-terminal-border);
-    transition: background-color 0.25s ease, border-color 0.25s ease;
+  [data-theme="light"] .rl-term {
+    box-shadow:
+      0 30px 70px -30px rgba(13, 17, 13, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
   }
 
-  .cli-titlebar {
-    border-color: var(--cli-titlebar-border);
-  }
-
-  .cli-title {
+  /* Window chrome */
+  .rl-chrome {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    height: 2.75rem;
+    padding: 0 1rem;
+    border-bottom: 1px solid var(--cli-titlebar-border);
     color: var(--cli-title-fg);
+    font-size: 0.92em;
   }
 
-  #cli-output {
-    color: var(--cli-text);
+  .rl-dots {
+    display: flex;
+    gap: 0.4rem;
   }
 
-  #cli-cursor,
-  :global(.cli-line-command) {
-    color: var(--cli-text);
+  .rl-dots i {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--line-strong);
   }
 
-  :global(.cli-line-output) {
-    color: var(--cli-output);
+  .rl-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  #cli-prompt {
+  .rl-episode b {
+    font-weight: 500;
     color: var(--cli-prompt);
   }
 
-  .cli-cursor-block {
-    background-color: var(--cli-prompt);
+  /* Phases */
+  .rl-phase {
+    display: grid;
+    grid-template-columns: 7.25em minmax(0, 1fr);
+    gap: 0 0.25em;
+    padding: 0.95em 1.25em 0.95em 1.35em;
+    border-left: 2px solid transparent;
+    transition: background-color 0.35s ease, border-color 0.35s ease;
+  }
+
+  .rl-phase + .rl-phase {
+    border-top: 1px dashed var(--cli-titlebar-border);
+  }
+
+  .rl-phase[data-active] {
+    border-left-color: var(--cli-prompt);
+    background: linear-gradient(90deg, var(--accent-soft), transparent 55%);
+  }
+
+  .rl-tag {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.05em;
+  }
+
+  .rl-tag-name {
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cli-title-fg);
+    transition: color 0.3s ease;
+  }
+
+  .rl-tag-sub {
+    font-size: 0.86em;
+    color: var(--cli-title-fg);
+    opacity: 0.75;
+  }
+
+  .rl-phase[data-active] .rl-tag-name {
+    color: var(--cli-prompt);
+  }
+
+  .rl-lines {
+    overflow: hidden;
+    transition: opacity 0.3s ease;
+  }
+
+  .rl-phase[data-phase="state"] .rl-lines {
+    height: calc(var(--rl-line) * 6);
+  }
+  .rl-phase[data-phase="action"] .rl-lines {
+    height: calc(var(--rl-line) * 5);
+  }
+  .rl-phase[data-phase="reward"] .rl-lines {
+    height: calc(var(--rl-line) * 6);
+  }
+
+  .rl-term.is-resetting .rl-lines {
+    opacity: 0;
+  }
+
+  /* Lines */
+  .rl-line {
+    margin: 0;
+    height: var(--rl-line);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre;
+  }
+
+  .rl-cmd {
+    color: var(--cli-text);
+  }
+
+  .rl-prompt {
+    margin-right: 0.7em;
+    color: var(--cli-prompt);
+  }
+
+  .rl-caret {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.05em;
+    margin-left: 0.1em;
+    vertical-align: -0.18em;
+    background: var(--cli-prompt);
+    animation: rl-blink 1s steps(2, start) infinite;
+  }
+
+  .rl-out {
+    padding-left: 1.3em;
+    color: var(--cli-dim);
+    animation: rl-rise 0.28s ease both;
+  }
+
+  .rl-out.rl-ok {
+    color: var(--cli-output);
+  }
+
+  /* Sensor results */
+  .rl-measure,
+  .rl-reward {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding-left: 1.3em;
+  }
+
+  .rl-measure {
+    height: calc(var(--rl-line) * 2);
+  }
+
+  .rl-measure-name {
+    flex: none;
+    width: 2.4em;
+    color: var(--cli-output);
+  }
+
+  .rl-plot {
+    flex: none;
+    width: 9.6em;
+    height: 2.9em;
+    overflow: visible;
+  }
+
+  .rl-plot-axis {
+    fill: none;
+    stroke: var(--cli-title-fg);
+    stroke-width: 1;
+    stroke-dasharray: 2 3;
+    opacity: 0.55;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .rl-plot-trace {
+    fill: none;
+    stroke: var(--cli-text);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    /* Drawn in with a normalised dash (pathLength="1"); no vector-effect here,
+       which would make Chromium measure that dash in screen pixels. */
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.8s cubic-bezier(0.45, 0, 0.2, 1);
+  }
+
+  .rl-measure.is-drawn .rl-plot-trace {
+    stroke-dashoffset: 0;
+  }
+
+  .rl-measure-values {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.5;
+    white-space: pre;
+    color: var(--cli-dim);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .rl-measure-values span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .rl-measure-values span:first-child {
+    color: var(--cli-text);
+  }
+
+  .rl-measure.is-read .rl-measure-values {
+    opacity: 1;
+  }
+
+  .rl-reward-name {
+    flex: none;
+    color: var(--cli-prompt);
+  }
+
+  .rl-reward-value {
+    flex: none;
+    font-weight: 500;
+    color: var(--cli-prompt);
+  }
+
+  .rl-reward-meter {
+    flex: none;
+    width: 6.2em;
+    height: 0.3em;
+    border-radius: 999px;
+    background: var(--cli-titlebar-border);
+    overflow: hidden;
+  }
+
+  .rl-reward-meter i {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--cli-prompt);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .rl-reward-delta {
+    color: var(--cli-output);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .rl-reward.is-settled .rl-reward-delta {
+    opacity: 1;
+  }
+
+  /* Status bar */
+  .rl-status {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    height: 2.6rem;
+    padding: 0 1.25em 0 1.35em;
+    border-top: 1px solid var(--cli-titlebar-border);
+    color: var(--cli-title-fg);
+    font-size: 0.92em;
+    white-space: nowrap;
+  }
+
+  .rl-rec {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+  }
+
+  .rl-rec i {
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background: var(--cli-prompt);
+    animation: rl-pulse 1.8s ease-in-out infinite;
+  }
+
+  .rl-tuple {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.7;
+  }
+
+  .rl-history-label {
+    opacity: 0.7;
+  }
+
+  .rl-history {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.22em;
+    height: 1.15em;
+  }
+
+  .rl-history i {
+    width: 0.38em;
+    border-radius: 1px;
+    background: var(--cli-prompt);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .rl-history i.is-in {
+    transform: scaleY(1);
+  }
+
+  @keyframes rl-blink {
+    to {
+      visibility: hidden;
+    }
+  }
+
+  @keyframes rl-rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.25em);
+    }
+  }
+
+  @keyframes rl-pulse {
+    50% {
+      opacity: 0.25;
+    }
+  }
+
+  /* Narrow screens: tags sit above their lines instead of beside them. */
+  @media (max-width: 560px) {
+    .rl-phase {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 0.8em 1em 0.85em 1.05em;
+    }
+
+    .rl-tag {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 0.75em;
+      margin-bottom: 0.35em;
+    }
+
+    .rl-status {
+      padding-inline: 1.05em 1em;
+    }
+
+    .rl-tuple {
+      visibility: hidden;
+    }
+
+    .rl-plot {
+      width: 7.2em;
+    }
+
+    .rl-measure,
+    .rl-reward {
+      gap: 0.8em;
+      padding-left: 0;
+    }
+
+    .rl-out {
+      padding-left: 1.3em;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rl-caret,
+    .rl-rec i,
+    .rl-out {
+      animation: none;
+    }
+
+    .rl-plot-trace,
+    .rl-reward-meter i,
+    .rl-history i,
+    .rl-measure-values,
+    .rl-reward-delta {
+      transition: none;
+    }
   }
 </style>

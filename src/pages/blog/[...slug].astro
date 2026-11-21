@@ -23,6 +23,6 @@ const { post, getTinaProps } = Astro.props;
 const tinaProps = await getTinaProps();
 ---
 
-<BlogPost {...tinaProps}>
-		<AdminBlogPost {...tinaProps} client:load/>
+<BlogPost {...post.data}>
+	<AdminBlogPost {...tinaProps} client:load />
 </BlogPost>
