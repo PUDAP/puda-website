@@ -1,0 +1,65 @@
+---
+const useCases = [
+  { title: "Robotic workcells", body: "Arms, grippers, and sensors under one command history." },
+  { title: "Autonomous test systems", body: "Repeatable protocols with traceable outputs." },
+  { title: "Industrial pilots", body: "AI planning within operator review and limits." },
+  { title: "Field operations", body: "Edge clients that keep approvals and data visible." },
+  { title: "Closed-loop optimization", body: "Verified outcomes feed the next action." },
+  { title: "Human-in-the-loop control", body: "Agents propose. People approve and audit." },
+];
+---
+
+<section class="section" aria-labelledby="applications-heading">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="t-label">Applications</p>
+        <h2 id="applications-heading" class="t-h2">Built for Physical AI teams.</h2>
+      </div>
+    </div>
+
+    <ul class="use-case-grid">
+      {
+        useCases.map((useCase) => (
+          <li>
+            <h3 class="t-title">{useCase.title}</h3>
+            <p class="t-small">{useCase.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .use-case-grid {
+    display: grid;
+    gap: 0 3rem;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .use-case-grid > li {
+    padding-block: 1.4rem 1.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .use-case-grid .t-small {
+    margin-top: 0.4rem;
+  }
+
+  @media (min-width: 44rem) {
+    .use-case-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .use-case-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

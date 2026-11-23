@@ -6,6 +6,7 @@ import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import BaseHead from "../components/BaseHead.astro";
 import config from '../content/config/config.json';
+import '../styles/blog.css';
 
 export async function getStaticPaths() {
 	const page = await getCollection("page");
@@ -31,7 +32,11 @@ const data = await getTinaProps();
 	</head>
 	<body>
 		<Header />
+		<div class="post">
+			<div class="post-body">
 				<Page {...data} client:tina />
+			</div>
+		</div>
 		<Footer />
 	</body>
 </html>

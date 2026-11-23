@@ -1,0 +1,63 @@
+---
+// A single quiet light source in the top-right corner, a trace of the lab-grid
+// motif inside it, and film grain to keep the dark gradient from banding.
+---
+
+<div class="hero-backdrop" aria-hidden="true">
+  <div class="hero-glow"></div>
+  <div class="hero-gridlines"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-floor"></div>
+</div>
+
+<style>
+  .hero-backdrop {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .hero-backdrop > div {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-glow {
+    background:
+      radial-gradient(
+        ellipse 62% 74% at 100% 0%,
+        var(--glow-a) 0%,
+        var(--glow-b) 22%,
+        var(--glow-c) 48%,
+        transparent 76%
+      ),
+      radial-gradient(ellipse 46% 42% at 0% 100%, rgba(212, 160, 75, 0.09), transparent 72%);
+    transition: opacity 0.3s ease;
+  }
+
+  .hero-gridlines {
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 96px 96px;
+    background-position: right top;
+    mask-image: radial-gradient(ellipse 70% 82% at 88% 12%, #000 0%, transparent 74%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 82% at 88% 12%, #000 0%, transparent 74%);
+  }
+
+  .hero-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.16;
+    mix-blend-mode: overlay;
+  }
+
+  .hero-floor {
+    background: linear-gradient(to bottom, transparent 72%, var(--bg-primary) 100%);
+  }
+
+  :global([data-theme="light"]) .hero-grain {
+    opacity: 0.1;
+    mix-blend-mode: multiply;
+  }
+</style>

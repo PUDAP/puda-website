@@ -1,94 +1,139 @@
 ---
 import config from "../content/config/config.json";
-import IconLink from "./react/IconLink";
+
 const today = new Date();
+const pages = config.nav.filter((item) => item.link !== "/");
+const resources = config.contactLinks ?? [];
 ---
-	<footer class="copyright-footer">
-		&copy; {today.getFullYear()}
-		{config.seo.siteOwner}. All rights reserved.
-		<div class="social-links">
-			{
-				config?.contactLinks?.map((link) => {
-					return (
-						<IconLink {...link} />
-					);
-				})
-			}
+
+<footer class="site-footer">
+	<div class="container footer-grid">
+		<div class="footer-brand">
+			<a class="footer-wordmark" href="/">{config.seo.title}</a>
+			<p>The hardware harness for Physical AI.</p>
 		</div>
-	</footer>
+
+		<nav class="footer-col" aria-label="Site">
+			<p class="t-label t-label-muted">Site</p>
+			<ul>
+				{pages.map((item) => (
+					<li><a href={item.link}>{item.title}</a></li>
+				))}
+			</ul>
+		</nav>
+
+		<nav class="footer-col" aria-label="Resources">
+			<p class="t-label t-label-muted">Resources</p>
+			<ul>
+				{resources.map((item) => (
+					<li>
+						<a href={item.link} target="_blank" rel="noopener noreferrer">
+							{item.title}
+							<span aria-hidden="true">↗</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		</nav>
+
+		<div class="footer-col">
+			<p class="t-label t-label-muted">Contact</p>
+			<ul>
+				<li><a href="mailto:hello@puda.co">hello@puda.co</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="container footer-base">
+		<span>&copy; {today.getFullYear()} {config.seo.siteOwner}. All rights reserved.</span>
+		<span>Physical Unified Device Architecture</span>
+	</div>
+</footer>
 
 <style>
-
-	.copyright-footer {
-		padding: 2em 1em 2em 1em;
+	.site-footer {
+		padding: clamp(3rem, 6vw, 4.5rem) 0 2rem;
 		background-color: var(--footer-bg);
 		border-top: 1px solid var(--footer-border);
-		color: var(--footer-fg);
-		text-align: center;
-		transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-	}
-
-	.social-links {
-		display: flex;
-		justify-content: center;
-		gap: 1em;
-		margin-top: 1em;
-	}
-
-	.social-links a {
-		text-decoration: none;
 		color: var(--footer-link-fg);
-		transition: color 0.2s ease;
+		font-size: var(--text-small);
+		transition: background-color 0.25s ease, border-color 0.25s ease;
 	}
 
-	.social-links a:hover {
+	.footer-grid {
+		display: grid;
+		gap: 2.5rem 2rem;
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.footer-wordmark {
+		display: inline-block;
+		font-family: var(--font-display);
+		font-size: 1.75rem;
+		font-weight: 400;
+		line-height: 1;
+		letter-spacing: 0.01em;
+		color: var(--fg-primary);
+		text-decoration: none;
+	}
+
+	.footer-brand p {
+		margin: 0.875rem 0 0;
+		max-width: 18rem;
+		color: var(--footer-link-fg);
+	}
+
+	.footer-col ul {
+		margin: 1rem 0 0;
+		padding: 0;
+		list-style: none;
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	.footer-col a {
+		color: var(--footer-link-fg);
+		text-decoration: none;
+		transition: color 0.15s ease;
+	}
+
+	.footer-col a:hover {
 		color: var(--footer-link-hover);
 	}
 
-	.tina-footer {
+	.footer-col a span {
+		margin-left: 0.15rem;
+		font-size: 0.85em;
+		opacity: 0.7;
+	}
+
+	.footer-base {
 		display: flex;
-		justify-content: center;
-		position: relative;
-		width: 100%;
-		overflow: hidden;
-		background-image: linear-gradient(60deg, #000000 0%,  #EC4815 50%, #000000 100%);
-		padding: 1.5em 0;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 0.5rem 2rem;
+		margin-top: clamp(2.5rem, 5vw, 4rem);
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--footer-border);
+		font-size: var(--text-caption);
+		color: var(--footer-fg);
 	}
 
-	.tina-banner-content {
-		display: flex;
-		align-items: center;
-		gap: 0.5em;
-		font-size: 1.2em;
-		position: relative;
-		z-index: 2;
+	@media (min-width: 40rem) {
+		.footer-grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+		.footer-brand {
+			grid-column: 1 / -1;
+		}
 	}
 
-	.tina-footer::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: -50%;
-		width: 200%;
-		height: 100%;
-		background-image: linear-gradient(60deg, #1F1E24 25%,   #EC4815 50%, #1F1E24 75%);
-		transition: transform 1s ease-in-out;
-		z-index: 1;
-	}
-
-	.tina-footer:has(.tina-banner-content a:hover)::before {
-		transform: scaleX(2);
-	}
-
-	.tina-banner-content img {
-		width: 30px;
-		height: auto;
-	}
-
-	.tina-banner-content a {
-		color: white;
-		text-decoration: none;
-		padding-top: 0.5em;
-		font-weight: bold;
+	@media (min-width: 60rem) {
+		.footer-grid {
+			grid-template-columns: minmax(0, 2.2fr) repeat(3, minmax(0, 1fr));
+		}
+		.footer-brand {
+			grid-column: auto;
+		}
 	}
 </style>

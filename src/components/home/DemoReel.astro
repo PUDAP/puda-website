@@ -1,0 +1,56 @@
+---
+import VideoPlaceholder from "../VideoPlaceholder.astro";
+
+const DEMO_VIDEO_EMBED = "https://youtu.be/0cpDzuESnMQ";
+const LIVE_DASHBOARD_URL = "https://demo.puda.co/d/bears/bears";
+---
+
+<section class="section" aria-labelledby="demo-reel-heading">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="t-label">Demo</p>
+        <h2 id="demo-reel-heading" class="t-h2">See PUDA in motion.</h2>
+      </div>
+      <div class="demo-reel-links">
+        <a class="link-arrow" href="/demo">
+          All demos
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"></path>
+            <path d="m13 6 6 6-6 6"></path>
+          </svg>
+        </a>
+        <a class="link-arrow" href={LIVE_DASHBOARD_URL} target="_blank" rel="noopener noreferrer">
+          Live lab dashboard
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 17 17 7"></path>
+            <path d="M7 7h10v10"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <VideoPlaceholder embedSrc={DEMO_VIDEO_EMBED} title="PUDA demo video" />
+    <p class="demo-reel-caption">An agent controlling lab devices from a Telegram chat.</p>
+  </div>
+</section>
+
+<style>
+  .demo-reel-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+  }
+
+  .demo-reel-caption {
+    margin: 1rem 0 0;
+    font-size: var(--text-small);
+    color: var(--fg-tertiary);
+  }
+
+  @media (min-width: 60rem) {
+    .demo-reel-links {
+      justify-content: flex-end;
+    }
+  }
+</style>

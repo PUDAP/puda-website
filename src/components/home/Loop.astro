@@ -1,0 +1,130 @@
+---
+// What PUDA records on every run — the same three records the hero terminal fills in.
+const records = [
+  {
+    index: "01",
+    name: "State",
+    body: "Machine status and vision layout.",
+    command: "puda machine state",
+  },
+  {
+    index: "02",
+    name: "Action",
+    body: "Prompts, reasoning, and tool calls.",
+    command: "puda protocol run",
+  },
+  {
+    index: "03",
+    name: "Reward",
+    body: "Sensor readings, measurements, and human feedback.",
+    command: "puda machine watch",
+  },
+];
+---
+
+<section class="section loop" aria-labelledby="loop-heading">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="t-label">What PUDA records</p>
+        <h2 id="loop-heading" class="t-h2">Every run becomes training data.</h2>
+      </div>
+      <p class="t-lead">
+        Physical context, agent decisions, and measured outcomes, kept together as one
+        trajectory.
+      </p>
+    </div>
+
+    <ol class="loop-grid">
+      {
+        records.map((record) => (
+          <li class="loop-item">
+            <span class="loop-index">{record.index}</span>
+            <h3 class="t-h3">{record.name}</h3>
+            <p class="t-body">{record.body}</p>
+            <code class="loop-command">
+              <span aria-hidden="true">$</span> {record.command}
+            </code>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .loop-grid {
+    display: grid;
+    gap: 0;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .loop-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1.75rem 0 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .loop-index {
+    font-family: var(--font-mono);
+    font-size: var(--text-label);
+    letter-spacing: 0.14em;
+    color: var(--fg-tertiary);
+  }
+
+  .loop-item h3 {
+    margin-top: 1.5rem;
+  }
+
+  .loop-item p {
+    margin-top: 0.75rem;
+    max-width: 21rem;
+  }
+
+  .loop-command {
+    margin-top: 1.75rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--signal);
+  }
+
+  .loop-command span {
+    margin-right: 0.35em;
+    color: var(--accent);
+  }
+
+  @media (min-width: 48rem) {
+    .loop-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-bottom: 1px solid var(--line);
+    }
+
+    .loop-item {
+      padding: 2rem 2.5rem 2.25rem;
+      border-bottom: 0;
+    }
+
+    .loop-item:first-child {
+      padding-left: 0;
+    }
+
+    .loop-item:last-child {
+      padding-right: 0;
+    }
+
+    .loop-item + .loop-item {
+      border-left: 1px solid var(--line);
+    }
+
+    .loop-command {
+      margin-top: auto;
+      padding-top: 2.5rem;
+    }
+  }
+</style>
