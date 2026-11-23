@@ -1,0 +1,41 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import client from "../../../tina/__generated__/client";
+import AdminNewsPost from "../../../tina/pages/AdminNewsPost";
+import "../../styles/blog.css";
+
+export async function getStaticPaths() {
+	const items = await getCollection("news");
+
+	return items.map((item) => ({
+		params: { slug: item.id },
+		props: {
+			item,
+			getTinaProps: async () =>
+				client.queries.news({
+					relativePath: item.data.tinaInfo.relativePath,
+				}),
+		},
+	}));
+}
+
+const { item, getTinaProps } = Astro.props;
+const tinaProps = await getTinaProps();
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={item.data.title} description={item.data.summary ?? item.data.title} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<AdminNewsPost {...tinaProps} client:load />
+		</main>
+		<Footer />
+	</body>
+</html>

@@ -1,0 +1,153 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import config from "../../content/config/config.json";
+
+const items = (await getCollection("news")).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+const formatDate = (date: Date) =>
+	date.toLocaleDateString("en-US", {
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+		timeZone: "UTC",
+	});
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`${config.seo.title} — News`} description={config.seo.description} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="section page-top" aria-labelledby="news-heading">
+				<div class="container">
+					<p class="t-label">News</p>
+					<h1 id="news-heading" class="t-h1">What's happening at PUDA</h1>
+
+					{
+						items.length === 0 ? (
+							<p class="t-body news-empty">No news yet. Check back soon.</p>
+						) : (
+							<ul class="news-list">
+								{items.map((item) => (
+									<li>
+										<a href={`/news/${item.id}`}>
+											<div class="news-meta">
+												<time datetime={item.data.pubDate.toISOString()}>
+													{formatDate(item.data.pubDate)}
+												</time>
+												{item.data.category && <span class="news-category">{item.data.category}</span>}
+											</div>
+											<div class="news-summary">
+												<h2 class="t-h3">{item.data.title}</h2>
+												{item.data.summary && <p class="t-body">{item.data.summary}</p>}
+											</div>
+											<svg class="news-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+												<path d="M5 12h14" />
+												<path d="m13 6 6 6-6 6" />
+											</svg>
+										</a>
+									</li>
+								))}
+							</ul>
+						)
+					}
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.news-empty {
+		margin-top: clamp(2rem, 4vw, 3rem);
+		color: var(--fg-tertiary);
+	}
+
+	.news-list {
+		margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+		padding: 0;
+		list-style: none;
+		border-top: 1px solid var(--line);
+	}
+
+	.news-list li {
+		border-bottom: 1px solid var(--line);
+	}
+
+	.news-list a {
+		display: grid;
+		gap: 0.75rem 2.5rem;
+		grid-template-columns: minmax(0, 1fr);
+		align-items: baseline;
+		padding-block: 1.75rem 2rem;
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.news-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 0.75rem;
+		align-items: baseline;
+		font-family: var(--font-mono);
+		font-size: var(--text-label);
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--fg-tertiary);
+	}
+
+	.news-category {
+		color: var(--accent);
+	}
+
+	.news-summary h2 {
+		transition: color 0.2s ease;
+	}
+
+	.news-summary p {
+		max-width: 44rem;
+		margin-top: 0.6rem;
+	}
+
+	.news-arrow {
+		display: none;
+		width: 1.25rem;
+		height: 1.25rem;
+		align-self: center;
+		color: var(--fg-tertiary);
+		transition: transform 0.2s ease, color 0.2s ease;
+	}
+
+	.news-list a:hover .news-arrow {
+		color: var(--accent);
+		transform: translateX(0.35rem);
+	}
+
+	.news-list a:hover h2 {
+		color: var(--accent);
+	}
+
+	@media (min-width: 48rem) {
+		.news-list a {
+			grid-template-columns: 9rem minmax(0, 1fr) auto;
+		}
+
+		.news-meta {
+			flex-direction: column;
+			gap: 0.4rem;
+		}
+
+		.news-arrow {
+			display: block;
+		}
+	}
+</style>

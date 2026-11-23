@@ -34,6 +34,40 @@ const blog = defineCollection({
   }),
 });
 
+const news = defineCollection({
+  loader: async () => {
+    const newsResponse = await client.queries.newsConnection();
+
+    return newsResponse.data.newsConnection.edges
+      ?.filter((item) => !!item)
+      .map((item) => {
+        const node = item?.node;
+
+        return {
+          ...node,
+          id: (node as any)?.slug ?? node?._sys.relativePath.replace(/\.mdx?$/, ""),
+          tinaInfo: node?._sys,
+        };
+      });
+  },
+  schema: z.object({
+    tinaInfo: z.object({
+      filename: z.string(),
+      basename: z.string(),
+      path: z.string(),
+      relativePath: z.string(),
+    }),
+    title: z.string(),
+    slug: z.string().optional(),
+    pubDate: z.coerce.date(),
+    category: z.string().nullish(),
+    summary: z.string().nullish(),
+    link: z.string().nullish(),
+    linkLabel: z.string().nullish(),
+    heroImage: z.string().nullish(),
+  }),
+});
+
 const page = defineCollection({
   loader: async () => {
     const postsResponse = await client.queries.pageConnection();
@@ -62,4 +96,4 @@ const page = defineCollection({
     body: z.any(),
   }),
 })
-export const collections = { blog, page };
+export const collections = { blog, news, page };

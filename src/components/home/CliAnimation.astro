@@ -292,12 +292,10 @@ const phases = [
         await command("state", "puda machine commands biologic");
         await output("state", "OCV  CA  CV  PEIS  GEIS  MPP", "", 420);
       } else {
-        await command("state", "puda machine state first");
-        await output("state", "idle", "rl-ok", 260);
-        await command("state", "puda machine state biologic");
-        await output("state", "idle", "rl-ok", 260);
-        await command("state", "puda machine state xrd");
-        await output("state", "idle", "rl-ok", 420);
+        await command("state", "puda machine state first, biologic, xrd");
+        await output("state", "first      idle", "rl-ok", 260);
+        await output("state", "biologic   idle", "rl-ok", 260);
+        await output("state", "xrd        idle", "rl-ok", 420);
       }
 
       // Action — a validated protocol dispatched to the machines.
