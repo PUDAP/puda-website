@@ -14,7 +14,7 @@ const phases = [
     class="rl-term"
     data-rl-terminal
     role="img"
-    aria-label="Animated terminal. An AI agent reads machine state with puda machine commands, runs a protocol with puda protocol run, and receives cyclic voltammetry and X-ray diffraction results as its reward, then resets the machine and repeats."
+    aria-label="Animated terminal. An AI agent reads machine state with puda machine commands, runs a protocol with puda protocol run, and reads timestamped cyclic voltammetry and X-ray diffraction results back with puda machine reward, then resets the machine and repeats."
   >
     <div class="rl-chrome" aria-hidden="true">
       <span class="rl-dots"><i></i><i></i><i></i></span>
@@ -184,6 +184,16 @@ const phases = [
       });
     }
 
+    // One simulated lab clock runs through every episode, so each record carries
+    // the time it happened: state before action, action before reward.
+    let clock = 9 * 3600 + 41 * 60;
+    function stamp(advance = 0) {
+      clock += advance;
+      const part = (n: number) => String(Math.floor(n) % 60).padStart(2, "0");
+      return `${String(Math.floor(clock / 3600) % 24).padStart(2, "0")}:${part(clock / 60)}:${part(clock)}`;
+    }
+    const ts = (time: string) => el("span", "rl-ts", time);
+
     function push(phase: PhaseId, node: HTMLElement) {
       const box = lines[phase];
       box.append(node);
@@ -191,8 +201,9 @@ const phases = [
       return node;
     }
 
-    async function command(phase: PhaseId, text: string) {
+    async function command(phase: PhaseId, text: string, advance = 1) {
       const row = el("p", "rl-line rl-cmd");
+      row.append(ts(stamp(advance)));
       const prompt = el("span", "rl-prompt", "$");
       const body = el("span", "rl-text");
       const caret = el("span", "rl-caret");
@@ -211,13 +222,25 @@ const phases = [
       caret.remove();
     }
 
-    async function output(phase: PhaseId, text: string, tone = "", delay = 170) {
-      push(phase, el("p", `rl-line rl-out ${tone}`.trim(), text));
+    /** Prints one output line `advance` seconds later and returns its timestamp. */
+    async function output(phase: PhaseId, text: string, tone = "", delay = 170, advance = 0) {
+      const time = stamp(advance);
+      const row = el("p", `rl-line rl-out ${tone}`.trim());
+      row.append(ts(time), el("span", "", text));
+      push(phase, row);
       await pause(delay);
+      return time;
     }
 
-    async function measurement(label: string, figure: SVGElement, readings: [string, string]) {
+    /** `measuredAt` is the time the instrument finished, not the time it was read back. */
+    async function measurement(
+      label: string,
+      figure: SVGElement,
+      readings: [string, string],
+      measuredAt: string,
+    ) {
       const row = el("div", "rl-measure");
+      row.append(ts(measuredAt));
       const name = el("span", "rl-measure-name", label);
       const values = el("span", "rl-measure-values");
       values.append(el("span", "", readings[0]), el("span", "", readings[1]));
@@ -236,6 +259,7 @@ const phases = [
 
     async function rewardLine(value: number, previous: number | null) {
       const row = el("p", "rl-line rl-reward");
+      row.append(ts(stamp(1)));
       const name = el("span", "rl-reward-name", "reward");
       const amount = el("span", "rl-reward-value", "+0.00");
       const meter = el("span", "rl-reward-meter");
@@ -300,17 +324,17 @@ const phases = [
 
       // Action — a validated protocol dispatched to the machines.
       setPhase("action");
-      await command("action", `puda protocol run -f protocols/${episode.protocol}.json`);
-      await output("action", "Command 1/3 succeeded: dispense_to (step 1)", "", 420);
-      await output("action", "Command 2/3 succeeded: CV (step 2)", "", 520);
-      await output("action", "Command 3/3 succeeded: scan (step 3)", "", 420);
+      await command("action", `puda protocol run -f ${episode.protocol}.json`, 2);
+      await output("action", "Command 1/3 succeeded: dispense_to (step 1)", "", 420, 38);
+      const cvAt = await output("action", "Command 2/3 succeeded: CV (step 2)", "", 520, 164);
+      const xrdAt = await output("action", "Command 3/3 succeeded: scan (step 3)", "", 420, 312);
       await output("action", "All 3 commands completed successfully", "rl-ok", 480);
 
-      // Reward — sensor results streamed back from the instruments.
+      // Reward — sensor results read back, each stamped with when it was measured.
       setPhase("reward");
-      await command("reward", "puda machine watch biologic xrd");
-      await measurement("cv", plot(cvPath(episode.cv.amp), 19), episode.cv.readings);
-      await measurement("xrd", plot(xrdPath(episode.xrd.purity), 34.5), episode.xrd.readings);
+      await command("reward", "puda machine reward biologic xrd", 3);
+      await measurement("cv", plot(cvPath(episode.cv.amp), 19), episode.cv.readings, cvAt);
+      await measurement("xrd", plot(xrdPath(episode.xrd.purity), 34.5), episode.xrd.readings, xrdAt);
       await rewardLine(episode.reward, index > 0 ? EPISODES[index - 1].reward : null);
       recordHistory(episode.reward);
       await pause(1500);
@@ -319,8 +343,8 @@ const phases = [
     /** Resets the environment for the next episode. */
     async function resetEnvironment() {
       setPhase("action");
-      await command("action", "puda machine reset first");
-      await output("action", "first → idle", "rl-ok", 1100);
+      await command("action", "puda machine reset first", 4);
+      await output("action", "first → idle", "rl-ok", 1100, 6);
     }
 
     async function loop() {
@@ -394,7 +418,7 @@ const phases = [
     color: var(--cli-text);
     font-family: var(--font-mono);
     font-size: 0.8125rem;
-    font-size: clamp(0.6875rem, 2.36cqi, 0.875rem);
+    font-size: clamp(0.6875rem, 2.25cqi, 0.875rem);
     line-height: var(--rl-line);
     text-align: left;
     transition: background-color 0.25s ease, border-color 0.25s ease;
@@ -517,6 +541,21 @@ const phases = [
     color: var(--cli-text);
   }
 
+  .rl-ts {
+    flex: none;
+    margin-right: 0.9em;
+    color: var(--cli-title-fg);
+  }
+
+  .rl-out .rl-ts {
+    margin-right: 2.2em;
+  }
+
+  .rl-measure .rl-ts,
+  .rl-reward .rl-ts {
+    margin-right: 1.2em;
+  }
+
   .rl-prompt {
     margin-right: 0.7em;
     color: var(--cli-prompt);
@@ -533,7 +572,6 @@ const phases = [
   }
 
   .rl-out {
-    padding-left: 1.3em;
     color: var(--cli-dim);
     animation: rl-rise 0.28s ease both;
   }
@@ -548,7 +586,6 @@ const phases = [
     display: flex;
     align-items: center;
     gap: 1em;
-    padding-left: 1.3em;
   }
 
   .rl-measure {
@@ -766,6 +803,13 @@ const phases = [
     .rl-reward {
       gap: 0.8em;
       padding-left: 0;
+    }
+
+    /* Narrow screens keep timestamps on the commands only. */
+    .rl-out .rl-ts,
+    .rl-measure .rl-ts,
+    .rl-reward .rl-ts {
+      display: none;
     }
 
     .rl-out {
